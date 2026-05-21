@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FixMaster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --or:#E8560A;--or2:#FF7235;--or-lt:#FFF3EE;--or-md:#FFD0B8;
+  --dark:#111110;--dark2:#1C1A17;
+  --white:#fff;--bg:#F7F5F2;--bg2:#EFEDE9;
+  --txt:#1A1815;--txt2:#6B6258;--txt3:#A8A09A;
+  --bdr:#E5E0D8;--bdr2:#D4CEC6;
+  --grn:#16A34A;--grn-lt:#DCFCE7;
+  --red:#DC2626;--red-lt:#FEE2E2;
+  --blu:#1D4ED8;--blu-lt:#DBEAFE;
+  --ylw:#CA8A04;--ylw-lt:#FEF9C3;
+  --r:10px;--r2:16px;--r3:24px;--r4:100px;
+  --sh:0 1px 8px rgba(0,0,0,.07);
+  --sh2:0 4px 24px rgba(0,0,0,.11);
+  --sh3:0 12px 48px rgba(0,0,0,.16);
+}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:'Noto Sans Georgian','Inter',sans-serif;background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased}
+#app{min-height:100vh}
+
+/* ─── UTILS ─── */
+.flex{display:flex}.flex-c{display:flex;flex-direction:column}.fc{align-items:center}.jc{justify-content:center}.jsb{justify-content:space-between}.gap4{gap:4px}.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}.gap20{gap:20px}.gap24{gap:24px}
+.w100{width:100%}.h100{height:100%}
+.bold{font-weight:700}.bolder{font-weight:800}.boldest{font-weight:900}
+.txt2{color:var(--txt2)}.txt3{color:var(--txt3)}.orange{color:var(--or)}
+.s11{font-size:.68rem}.s12{font-size:.75rem}.s13{font-size:.81rem}.s14{font-size:.875rem}.s15{font-size:.94rem}.s16{font-size:1rem}.s18{font-size:1.125rem}.s20{font-size:1.25rem}.s24{font-size:1.5rem}.s28{font-size:1.75rem}.s32{font-size:2rem}
+.mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
+.p12{padding:12px}.p16{padding:16px}.p20{padding:20px}.p24{padding:24px}
+.br{border-radius:var(--r)}.br2{border-radius:var(--r2)}.br3{border-radius:var(--r3)}.br4{border-radius:var(--r4)}
+.card{background:var(--white);border:1px solid var(--bdr);border-radius:var(--r2);box-shadow:var(--sh)}
+.card2{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r2)}
+.hidden{display:none!important}
+.lh16{line-height:1.6}.lh17{line-height:1.7}
+.up{text-transform:uppercase}.ls{letter-spacing:.06em}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* badge */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:var(--r4);font-size:.68rem;font-weight:800}
+.badge-or{background:var(--or-lt);color:var(--or)}.badge-grn{background:var(--grn-lt);color:var(--grn)}.badge-red{background:var(--red-lt);color:var(--red)}.badge-blu{background:var(--blu-lt);color:var(--blu)}.badge-ylw{background:var(--ylw-lt);color:var(--ylw)}.badge-txt{background:var(--bg2);color:var(--txt2)}
+/* avatar */
+.ava{display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-family:'Inter',sans-serif;flex-shrink:0;overflow:hidden}
+.ava img{width:100%;height:100%;object-fit:cover}
+.ava-or{background:linear-gradient(135deg,var(--or),var(--or2));color:#fff}
+.ava-grn{background:var(--grn-lt);color:var(--grn)}
+.ava-blu{background:var(--blu-lt);color:var(--blu)}
+.ava32{width:32px;height:32px;font-size:.8rem}
+.ava40{width:40px;height:40px;font-size:.9rem}
+.ava48{width:48px;height:48px;font-size:1rem}
+.ava56{width:56px;height:56px;font-size:1.1rem}
+.ava80{width:80px;height:80px;font-size:1.6rem}
+/* stars */
+.stars{color:var(--or);letter-spacing:1px}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:'Noto Sans Georgian','Inter',sans-serif;font-weight:700;border-radius:var(--r);transition:all .2s}
+.btn-primary{background:var(--or);color:#fff;padding:12px 22px;font-size:.875rem;box-shadow:0 4px 14px rgba(232,86,10,.28)}
+.btn-primary:hover{background:#c9470a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,86,10,.38)}
+.btn-ghost{background:#fff;color:var(--txt);padding:11px 20px;font-size:.875rem;border:1.5px solid var(--bdr)}
+.btn-ghost:hover{border-color:var(--or);color:var(--or)}
+.btn-danger{background:var(--red-lt);color:var(--red);padding:11px 20px;font-size:.875rem}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-grn{background:var(--grn);color:#fff;padding:12px 22px;font-size:.875rem}
+.btn-grn:hover{background:#15803d}
+.btn-pill{border-radius:var(--r4)}
+.btn-full{width:100%}
+.btn-sm{padding:8px 14px;font-size:.78rem}
+.btn-xs{padding:5px 10px;font-size:.7rem}
+.btn-icon{width:36px;height:36px;padding:0;border-radius:var(--r)}
+.btn-lg{padding:14px 28px;font-size:.95rem}
+.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+
+/* ─── FORM ELEMENTS ─── */
+.f-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.f-label{font-size:.68rem;font-weight:800;color:var(--txt2);text-transform:uppercase;letter-spacing:.08em}
+.f-inp{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--r);padding:11px 13px;font-family:'Noto Sans Georgian','Inter',sans-serif;font-size:.875rem;color:var(--txt);outline:none;transition:border-color .2s,background .2s}
+.f-inp:focus{border-color:var(--or);background:#fff}
+.f-inp::placeholder{color:var(--txt3)}
+.f-inp.err{border-color:var(--red);background:var(--red-lt)}
+.f-inp-icon{position:relative}
+.f-inp-icon .f-inp{padding-left:40px}
+.f-inp-icon .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none}
+.f-inp-icon .ic svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f-hint{font-size:.68rem;color:var(--txt3);margin-top:3px}
+.f-err-msg{font-size:.68rem;color:var(--red);margin-top:3px}
+select.f-inp option{background:#fff}
+textarea.f-inp{resize:none;min-height:80px;line-height:1.5}
+.f-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ─── OTP INPUT ─── */
+.otp-wrap{display:flex;gap:8px;justify-content:center}
+.otp-inp{width:44px;height:52px;text-align:center;font-size:1.3rem;font-weight:800;font-family:'Inter',sans-serif;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--r);outline:none;transition:all .2s;color:var(--dark)}
+.otp-inp:focus{border-color:var(--or);background:#fff;box-shadow:0 0 0 3px rgba(232,86,10,.12)}
+.otp-inp.filled{border-color:var(--or);background:var(--or-lt)}
+
+/* ─── DIVIDER ─── */
+.divider{display:flex;align-items:center;gap:12px;margin:16px 0}
+.divider span{font-size:.72rem;color:var(--txt3);white-space:nowrap;font-weight:600}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bdr)}
+
+/* ─── SOCIAL AUTH BTNS ─── */
+.soc-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px;border-radius:var(--r);border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-size:.875rem;font-weight:600;color:var(--txt);transition:all .2s;font-family:'Noto Sans Georgian','Inter',sans-serif;margin-bottom:10px}
+.soc-btn:hover{border-color:var(--bdr2);box-shadow:var(--sh)}
+.soc-btn svg{width:20px;height:20px;flex-shrink:0}
+
+/* ─── TABS ─── */
+.tabs{display:flex;background:var(--bg2);border-radius:var(--r);padding:3px;gap:3px;margin-bottom:20px}
+.tab-btn{flex:1;padding:9px;border-radius:calc(var(--r) - 2px);font-size:.82rem;font-weight:700;border:none;cursor:pointer;background:transparent;color:var(--txt2);transition:all .2s;font-family:'Noto Sans Georgian','Inter',sans-serif}
+.tab-btn.active{background:#fff;color:var(--or);box-shadow:var(--sh)}
+
+/* ─── CHIPS ─── */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 13px;border-radius:var(--r4);font-size:.78rem;font-weight:600;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;transition:all .2s;color:var(--txt2)}
+.chip:hover{border-color:var(--or);color:var(--or)}
+.chip.sel{background:var(--or-lt);border-color:var(--or);color:var(--or)}
+
+/* ─── STAT CARDS ─── */
+.stat-card{background:#fff;border:1px solid var(--bdr);border-radius:var(--r2);padding:16px;box-shadow:var(--sh)}
+.stat-n{font-family:'Inter',sans-serif;font-size:1.8rem;font-weight:900;line-height:1;color:var(--dark)}
+.stat-n.or{color:var(--or)}
+.stat-l{font-size:.7rem;color:var(--txt3);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+.stat-trend{font-size:.68rem;font-weight:700;margin-top:6px}
+.stat-trend.up{color:var(--grn)}.stat-trend.dn{color:var(--red)}
+
+/* ─── JOB CARD ─── */
+.job-card{background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .25s}
+.job-card:hover{border-color:var(--or);box-shadow:var(--sh2);transform:translateY(-2px)}
+.job-card.selected{border-color:var(--or);background:var(--or-lt)}
+.jc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.jc-title{font-size:.92rem;font-weight:800;color:var(--dark);margin-bottom:3px}
+.jc-sub{font-size:.75rem;color:var(--txt2)}
+.jc-body{font-size:.82rem;color:var(--txt2);line-height:1.6;margin-bottom:10px}
+.jc-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.jc-meta{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--txt3)}
+.jc-meta svg{width:13px;height:13px;stroke:var(--txt3);fill:none;stroke-width:2;stroke-linecap:round}
+.jc-price{font-size:1rem;font-weight:900;color:var(--or);font-family:'Inter',sans-serif}
+
+/* ─── MASTER CARD ─── */
+.master-card{background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .25s;display:flex;align-items:flex-start;gap:12px}
+.master-card:hover{border-color:var(--or);box-shadow:var(--sh2)}
+.mc-info{flex:1;min-width:0}
+.mc-name{font-size:.92rem;font-weight:800;color:var(--dark)}
+.mc-svc{font-size:.72rem;color:var(--txt2);margin-top:2px}
+.mc-stars{display:flex;align-items:center;gap:4px;margin-top:6px}
+.mc-stars svg{width:12px;height:12px;fill:var(--or);color:var(--or)}
+.mc-star-n{font-size:.72rem;font-weight:700;color:var(--txt)}
+.mc-rev-n{font-size:.68rem;color:var(--txt3)}
+.mc-price{font-size:.8rem;font-weight:700;color:var(--grn)}
+
+/* ─── TIMELINE / STATUS ─── */
+.tl-item{display:flex;gap:12px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:28px;bottom:-4px;width:1px;background:var(--bdr)}
+.tl-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.tl-dot svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.tl-or{background:var(--or)}.tl-grn{background:var(--grn)}.tl-gray{background:var(--bdr2)}.tl-blu{background:var(--blu)}
+.tl-content{flex:1;padding-bottom:20px}
+.tl-title{font-size:.85rem;font-weight:700;color:var(--txt)}
+.tl-time{font-size:.68rem;color:var(--txt3);margin-top:2px}
+.tl-desc{font-size:.78rem;color:var(--txt2);margin-top:4px;line-height:1.5}
+
+/* ─── NOTICE / ALERT ─── */
+.notice{border-radius:var(--r);padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.notice-or{background:var(--or-lt);border:1px solid var(--or-md)}.notice-grn{background:var(--grn-lt);border:1px solid #bbf7d0}.notice-red{background:var(--red-lt);border:1px solid #fecaca}.notice-blu{background:var(--blu-lt);border:1px solid #bfdbfe}
+.notice svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+.notice-or svg{stroke:var(--or)}.notice-grn svg{stroke:var(--grn)}.notice-red svg{stroke:var(--red)}.notice-blu svg{stroke:var(--blu)}
+.notice p{font-size:.8rem;line-height:1.55}
+.notice-or p{color:#92400e}.notice-grn p{color:#166534}.notice-red p{color:#991b1b}.notice-blu p{color:#1e3a8a}
+
+/* ─── SPINNER ─── */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:24px;height:24px;border:2.5px solid var(--bdr);border-top-color:var(--or);border-radius:50%;animation:spin .7s linear infinite}
+.spinner-sm{width:18px;height:18px;border-width:2px}
+.loading-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:var(--bg)}
+
+/* ─── MODAL ─── */
+.modal-bg{position:fixed;inset:0;background:rgba(17,17,16,.55);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:var(--r3);width:100%;max-width:440px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh3);animation:slideup .25s ease}
+@keyframes slideup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-head{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between}
+.modal-body{padding:20px 24px 24px}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt2);font-size:1rem;transition:all .2s}
+.modal-close:hover{background:var(--bg2)}
+
+/* ─── TOAST ─── */
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+.toast{background:var(--dark);color:#fff;padding:10px 18px;border-radius:var(--r4);font-size:.82rem;font-weight:600;box-shadow:var(--sh3);animation:toast-in .3s ease;max-width:90vw;text-align:center}
+.toast.grn{background:var(--grn)}.toast.red{background:var(--red)}.toast.or{background:var(--or)}
+@keyframes toast-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes toast-out{from{opacity:1}to{opacity:0;transform:translateY(10px)}}
+
+/* ═══════════════════════════════
+   LANDING PAGE
+═══════════════════════════════ */
+.landing{background:var(--white);min-height:100vh}
+
+/* ─── LANDING NAV ─── */
+.l-nav{background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;box-shadow:0 1px 10px rgba(0,0,0,.05)}
+.l-nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.l-nav-links{display:flex;list-style:none;gap:0}
+.l-nav-links a{padding:0 13px;line-height:62px;font-size:.82rem;font-weight:500;color:var(--txt2);text-decoration:none;border-bottom:2px solid transparent;transition:all .2s}
+.l-nav-links a:hover{color:var(--or);border-bottom-color:var(--or)}
+.l-nav-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.lang-sw{display:flex;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--r4);padding:2px;gap:2px}
+.lbtn{padding:4px 10px;border-radius:var(--r4);font-size:.7rem;font-weight:800;cursor:pointer;border:none;background:transparent;color:var(--txt3);transition:all .2s;font-family:'Inter',sans-serif}
+.lbtn.on{background:#fff;color:var(--or);box-shadow:var(--sh)}
+.lbtn:hover:not(.on){color:var(--txt)}
+.ham{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px}
+.ham span{display:block;width:20px;height:2px;background:var(--txt);border-radius:2px}
+
+/* ─── LANDING HERO ─── */
+.l-hero{background:linear-gradient(160deg,#FFFAF7 0%,var(--bg) 60%,#ECE8E3 100%);padding:5rem 1.5rem 6rem;position:relative;overflow:hidden}
+.l-hero-orb1{position:absolute;top:-150px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(232,86,10,.1),transparent 65%);pointer-events:none}
+.l-hero-orb2{position:absolute;bottom:-200px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,86,10,.06),transparent 65%);pointer-events:none}
+.l-hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;position:relative;z-index:1}
+.l-hero-pill{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--bdr);border-radius:var(--r4);padding:5px 13px 5px 7px;font-size:.7rem;font-weight:700;color:var(--txt2);box-shadow:var(--sh);margin-bottom:1.1rem}
+.l-pill-dot{width:20px;height:20px;background:var(--or-lt);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.l-pill-dot::before{content:'';width:7px;height:7px;background:var(--or);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.l-hero-h{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;color:var(--dark);margin-bottom:1rem}
+.l-hero-p{font-size:.95rem;color:var(--txt2);line-height:1.7;max-width:430px;margin-bottom:1.5rem}
+.l-hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:2rem}
+.l-hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+/* phone mockup */
+.l-phone{position:relative;display:flex;justify-content:center}
+.l-phone-shell{width:270px;background:#fff;border-radius:34px;box-shadow:var(--sh3),inset 0 0 0 1px rgba(0,0,0,.06);overflow:hidden;border:5px solid #fff;outline:1px solid var(--bdr)}
+.l-ph-top{background:linear-gradient(135deg,var(--dark2),#2A2520);padding:18px 16px 22px;position:relative;overflow:hidden}
+.l-ph-glow{position:absolute;top:-40px;right:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(232,86,10,.25),transparent 65%)}
+.l-ph-greeting{font-size:.62rem;color:rgba(255,255,255,.45);margin-bottom:1px;font-weight:500}
+.l-ph-name{font-size:.92rem;font-weight:800;color:#fff;margin-bottom:10px}
+.l-ph-search{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);border-radius:var(--r4);padding:8px 12px;display:flex;align-items:center;gap:6px}
+.l-ph-search svg{width:12px;height:12px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:2}
+.l-ph-search span{font-size:.65rem;color:rgba(255,255,255,.35)}
+.l-ph-body{padding:12px}
+.l-ph-slab{font-size:.58rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
+.l-ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.l-ph-svc{background:var(--bg);border-radius:10px;padding:8px 5px;text-align:center;border:1.5px solid transparent;transition:all .2s}
+.l-ph-svc svg{display:block;margin:0 auto 4px}
+.l-ph-svc span{font-size:.54rem;font-weight:700;color:var(--txt2);line-height:1.3}
+.l-ph-job{background:linear-gradient(135deg,var(--or),var(--or2));border-radius:var(--r);padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.l-ph-job-ic{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.l-ph-job-ic svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.l-ph-job-t{font-size:.7rem;font-weight:800;color:#fff}
+.l-ph-job-s{font-size:.58rem;color:rgba(255,255,255,.7);margin-top:1px}
+.l-ph-job-tag{background:rgba(255,255,255,.25);color:#fff;font-size:.55rem;font-weight:800;padding:2px 6px;border-radius:var(--r4);margin-left:auto;flex-shrink:0}
+/* float cards */
+.fc{position:absolute;background:#fff;border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh2);padding:9px 11px;display:flex;align-items:center;gap:8px}
+.fc.a1{top:-16px;right:-52px;animation:flt1 4s ease-in-out infinite}
+.fc.a2{bottom:80px;right:-58px;animation:flt2 4s ease-in-out infinite}
+.fc.a3{bottom:16px;left:-56px;animation:flt1 4s ease-in-out infinite .5s}
+@keyframes flt1{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes flt2{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.fc-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fc-ic.g{background:#dcfce7}.fc-ic.b{background:#dbeafe}.fc-ic.y{background:#fef9c3}
+.fc-ic svg{width:14px;height:14px}
+.fc-t{font-size:.68rem;font-weight:700;color:var(--txt);white-space:nowrap}
+.fc-s{font-size:.6rem;color:var(--txt3);white-space:nowrap}
+
+/* ─── HOW IT WORKS ─── */
+.l-how{padding:5rem 1.5rem;background:#fff}
+.l-how-inner{max-width:1100px;margin:0 auto}
+.l-section-eye{display:inline-block;background:var(--or-lt);color:var(--or);border-radius:var(--r4);padding:4px 12px;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem}
+.l-section-h{font-size:clamp(1.8rem,3vw,2.6rem);font-weight:900;letter-spacing:-.03em;color:var(--dark);line-height:1.1;margin-bottom:.6rem}
+.l-section-p{font-size:.9rem;color:var(--txt2);max-width:460px;line-height:1.6}
+.l-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:2.5rem;position:relative}
+.l-steps::before{content:'';position:absolute;top:28px;left:calc(12.5% + 18px);right:calc(12.5% + 18px);height:1px;background:repeating-linear-gradient(90deg,var(--or) 0,var(--or) 6px,transparent 6px,transparent 14px);opacity:.3}
+.l-step{background:var(--bg);border-radius:var(--r2);padding:1.5rem 1.1rem;text-align:center;position:relative;z-index:1}
+.l-step-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--or),var(--or2));margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(232,86,10,.3)}
+.l-step-num svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.l-step-t{font-size:.9rem;font-weight:800;color:var(--dark);margin-bottom:.4rem}
+.l-step-p{font-size:.75rem;color:var(--txt2);line-height:1.55}
+
+/* ─── SERVICES ─── */
+.l-svcs{padding:5rem 1.5rem;background:var(--bg)}
+.l-svcs-inner{max-width:1100px;margin:0 auto}
+.l-svcs-head{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.l-svcs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.l-svc-card{background:#fff;border:1.5px solid var(--bdr);border-radius:var(--r2);padding:1.5rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.l-svc-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--or),var(--or2));opacity:0;transition:opacity .3s}
+.l-svc-card:hover{transform:translateY(-3px);box-shadow:var(--sh3);border-color:transparent}
+.l-svc-card:hover::after{opacity:1}
+.l-svc-card>*{position:relative;z-index:1}
+.l-svc-card:hover .l-svc-t,.l-svc-card:hover .l-svc-d,.l-svc-card:hover .l-svc-lnk{color:#fff!important}
+.l-svc-card:hover .l-svc-ico{background:rgba(255,255,255,.2)!important}
+.l-svc-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;transition:background .3s}
+.l-svc-t{font-size:.95rem;font-weight:800;color:var(--dark);margin-bottom:.4rem;transition:color .3s}
+.l-svc-d{font-size:.78rem;color:var(--txt2);line-height:1.55;margin-bottom:.75rem;transition:color .3s}
+.l-svc-lnk{font-size:.72rem;font-weight:800;color:var(--or);display:inline-flex;align-items:center;gap:4px;transition:color .3s}
+.l-svc-lnk svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ─── CTA STRIP ─── */
+.l-cta{background:linear-gradient(135deg,var(--dark2),var(--dark));padding:4rem 1.5rem;text-align:center}
+.l-cta-inner{max-width:640px;margin:0 auto}
+.l-cta h2{font-size:clamp(1.8rem,3vw,2.4rem);font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.15;margin-bottom:.75rem}
+.l-cta p{font-size:.9rem;color:rgba(255,255,255,.45);margin-bottom:1.75rem}
+.l-cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ─── FOOTER ─── */
+.l-footer{background:var(--dark);padding:3rem 1.5rem 0}
+.l-footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.lf-brand p{font-size:.78rem;color:rgba(255,255,255,.33);margin-top:.8rem;line-height:1.7;max-width:200px}
+.lf-soc{display:flex;gap:6px;margin-top:1rem}
+.lf-sc{width:30px;height:30px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.36);text-decoration:none;font-size:.65rem;font-weight:800;transition:all .2s;font-family:'Inter',sans-serif}
+.lf-sc:hover{background:var(--or);color:#fff;border-color:var(--or)}
+.lf-col-t{font-size:.7rem;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1rem}
+.lf-links{list-style:none;display:flex;flex-direction:column;gap:.48rem}
+.lf-links a{font-size:.78rem;color:rgba(255,255,255,.32);text-decoration:none;transition:color .2s}
+.lf-links a:hover{color:var(--or)}
+.l-footer-bot{max-width:1100px;margin:0 auto;padding:1.1rem 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.l-footer-bot p{font-size:.68rem;color:rgba(255,255,255,.22)}
+.l-footer-bot span{color:var(--or)}
+
+/* ═══════════════════════════════
+   AUTH SCREENS
+═══════════════════════════════ */
+.auth-page{min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+.auth-nav{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.auth-content{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+.auth-card{background:#fff;border-radius:var(--r3);width:100%;max-width:420px;padding:2rem;box-shadow:var(--sh3)}
+.auth-logo{display:flex;align-items:center;gap:9px;text-decoration:none;margin-bottom:1.5rem}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--or),var(--or2));border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(232,86,10,.28);flex-shrink:0}
+.logo-mark svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-name{font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:800;color:var(--dark);letter-spacing:-.03em}
+.logo-name span{color:var(--or)}
+.auth-h{font-size:1.4rem;font-weight:900;color:var(--dark);margin-bottom:.3rem;letter-spacing:-.02em}
+.auth-sub{font-size:.82rem;color:var(--txt2);margin-bottom:1.5rem}
+.auth-role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.auth-role-card{background:var(--bg);border:2px solid var(--bdr);border-radius:var(--r2);padding:1.25rem;cursor:pointer;transition:all .2s;text-align:center}
+.auth-role-card:hover{border-color:var(--or-md)}
+.auth-role-card.sel{border-color:var(--or);background:var(--or-lt)}
+.arc-ico{width:48px;height:48px;border-radius:14px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+.arc-t{font-size:.88rem;font-weight:800;color:var(--dark);margin-bottom:3px}
+.arc-s{font-size:.7rem;color:var(--txt2);line-height:1.4}
+/* phone verify screen */
+.otp-screen{}
+.phone-display{background:var(--bg);border-radius:var(--r);padding:12px;text-align:center;margin-bottom:1rem;font-size:.9rem;font-weight:700;color:var(--txt)}
+.otp-hint{font-size:.75rem;color:var(--txt2);text-align:center;margin-bottom:1.25rem;line-height:1.5}
+.resend-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px}
+.resend-btn{background:none;border:none;cursor:pointer;color:var(--or);font-size:.78rem;font-weight:700;font-family:'Noto Sans Georgian','Inter',sans-serif}
+.resend-btn:disabled{color:var(--txt3);cursor:default}
+.resend-count{font-size:.78rem;color:var(--txt3)}
+
+/* ═══════════════════════════════
+   DASHBOARD SHELL
+═══════════════════════════════ */
+.dash{display:flex;min-height:100vh;background:var(--bg)}
+
+/* sidebar */
+.dash-side{
+  width:240px;flex-shrink:0;
+  background:#fff;border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:50;
+  transition:transform .3s;
+}
+.ds-top{padding:20px 16px 16px;border-bottom:1px solid var(--bdr)}
+.ds-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r);cursor:pointer;transition:background .2s;text-decoration:none;margin-top:8px}
+.ds-user:hover{background:var(--bg)}
+.ds-user-info{flex:1;min-width:0}
+.ds-user-name{font-size:.82rem;font-weight:800;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ds-user-role{font-size:.65rem;color:var(--txt3);margin-top:1px}
+.ds-nav{flex:1;padding:10px 8px;overflow-y:auto}
+.ds-nav-section{font-size:.6rem;font-weight:800;color:var(--txt3);text-transform:uppercase;letter-spacing:.1em;padding:10px 8px 5px;margin-top:6px}
+.ds-nav a{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:var(--r);font-size:.82rem;font-weight:600;color:var(--txt2);text-decoration:none;transition:all .2s;margin-bottom:2px;position:relative}
+.ds-nav a svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ds-nav a:hover{background:var(--bg);color:var(--txt)}
+.ds-nav a.active{background:var(--or-lt);color:var(--or);font-weight:800}
+.ds-nav a.active svg{stroke:var(--or)}
+.ds-badge{background:var(--or);color:#fff;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:var(--r4);margin-left:auto;font-family:'Inter',sans-serif}
+.ds-bottom{padding:12px 8px;border-top:1px solid var(--bdr)}
+.ds-logout{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r);font-size:.82rem;font-weight:600;color:var(--txt3);cursor:pointer;transition:all .2s;width:100%;background:none;border:none;font-family:'Noto Sans Georgian','Inter',sans-serif}
+.ds-logout:hover{background:var(--red-lt);color:var(--red)}
+.ds-logout svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* main content */
+.dash-main{margin-left:240px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+.dash-topbar{background:#fff;border-bottom:1px solid var(--bdr);padding:0 1.5rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;flex-shrink:0}
+.dash-topbar-l{display:flex;align-items:center;gap:12px}
+.dash-topbar-r{display:flex;align-items:center;gap:8px}
+.dash-page-title{font-size:.95rem;font-weight:800;color:var(--dark)}
+.notif-btn{width:36px;height:36px;border-radius:var(--r);background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt2);transition:all .2s;position:relative}
+.notif-btn:hover{background:var(--bg2)}
+.notif-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--or);border-radius:50%;border:1.5px solid #fff}
+.dash-content{padding:1.5rem;flex:1;max-width:1000px}
+.dash-h{font-size:1.3rem;font-weight:900;color:var(--dark);margin-bottom:.3rem;letter-spacing:-.02em}
+.dash-p{font-size:.85rem;color:var(--txt2);margin-bottom:1.5rem}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.section-title{font-size:.9rem;font-weight:800;color:var(--dark)}
+
+/* mobile nav */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bdr);z-index:50;padding:8px 0 max(8px,env(safe-area-inset-bottom));box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.mob-nav-inner{display:flex;align-items:center;justify-content:space-around}
+.mob-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border:none;background:transparent;cursor:pointer;color:var(--txt3);transition:all .2s;position:relative;font-family:'Noto Sans Georgian','Inter',sans-serif}
+.mob-nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mob-nav-btn span{font-size:.58rem;font-weight:700}
+.mob-nav-btn.active{color:var(--or)}
+.mob-nav-badge{position:absolute;top:4px;right:10px;width:7px;height:7px;background:var(--or);border-radius:50%;border:1.5px solid #fff}
+.mob-topbar{display:none;background:#fff;border-bottom:1px solid var(--bdr);padding:0 1rem;height:54px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.mob-menu-btn{width:34px;height:34px;border-radius:var(--r);background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mob-menu-btn svg{width:17px;height:17px;stroke:var(--txt);fill:none;stroke-width:2}
+.mob-drawer-bg{display:none;position:fixed;inset:0;background:rgba(17,17,16,.5);z-index:200;backdrop-filter:blur(4px)}
+.mob-drawer{position:fixed;left:0;top:0;bottom:0;width:min(280px,85vw);background:#fff;z-index:201;transform:translateX(-100%);transition:transform .3s;overflow-y:auto;box-shadow:var(--sh3)}
+.mob-drawer.open{transform:none}
+
+/* ─── RESPONSIVE DASH ─── */
+@media(max-width:900px){
+  .dash-side{transform:translateX(-100%)}
+  .dash-side.open{transform:none}
+  .dash-main{margin-left:0}
+  .mob-nav{display:flex}
+  .mob-topbar{display:flex}
+  .dash-topbar{display:none}
+  .mob-drawer-bg.open{display:block}
+  .dash-content{padding:1rem;padding-bottom:80px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ─── RESPONSIVE LANDING ─── */
+@media(max-width:1024px){
+  .l-svcs-grid{grid-template-columns:repeat(2,1fr)}
+  .l-hero-inner{grid-template-columns:1fr;gap:2rem;padding:4rem 1.5rem 5rem}
+  .l-phone{display:none}
+  .l-footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
+}
+@media(max-width:768px){
+  .l-nav-links,.l-nav-links{display:none}
+  .ham{display:flex}
+  .l-svcs-grid{grid-template-columns:1fr}
+  .l-steps{grid-template-columns:repeat(2,1fr)}
+  .l-steps::before{display:none}
+  .l-footer-inner{grid-template-columns:1fr}
+  .l-footer-bot{flex-direction:column;text-align:center}
+  .l-hero-stats{grid-template-columns:repeat(2,1fr)}
+  .f-row2{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .auth-role-grid{grid-template-columns:1fr}
+}
+
+/* ─── PROFILE PAGE ─── */
+.profile-top{background:linear-gradient(135deg,var(--dark2),#2A2520);border-radius:var(--r2);padding:1.5rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.profile-top::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,86,10,.2),transparent 65%);pointer-events:none}
+.profile-name{font-size:1.1rem;font-weight:900;color:#fff}
+.profile-role-tag{background:rgba(255,255,255,.15);color:#fff;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:var(--r4);margin-top:4px;display:inline-block}
+.profile-sub{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:4px}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(22,163,74,.2);color:#4ade80;font-size:.65rem;font-weight:700;padding:3px 9px;border-radius:var(--r4);margin-top:6px}
+.verified-badge svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+
+/* earnings chart placeholder */
+.earnings-bar-wrap{display:flex;align-items:flex-end;gap:8px;height:100px;padding:0 4px}
+.earnings-bar{flex:1;border-radius:4px 4px 0 0;background:var(--or-lt);transition:height .4s ease;cursor:pointer;position:relative}
+.earnings-bar:hover{background:var(--or-md)}
+.earnings-bar.active{background:var(--or)}
+.earnings-bar-lbl{font-size:.58rem;color:var(--txt3);text-align:center;margin-top:4px;font-weight:600}
+.earnings-month{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading-screen"><div class="spinner"></div></div></div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   TRANSLATIONS
+═══════════════════════════════════════════════ */
+const LANG = {
+ka:{
+  available:'ხელმისაწვდომია ახლა',
+  hero_h:'სახლი, <span style="color:var(--or)">სრულყოფილი</span><br/>ნებისმიერ დროს',
+  hero_p:'პროფ. ოსტატები 30 წუთში — სანტექნიკა, ელ., მოხატვა. სწრაფი, ხარ., სამ. ფასი.',
+  call_master:'ოსტატის გამოძახება',see_svcs:'სერვისები →',
+  stats:['შ. სამ.','წ. გამ.','კმ. კლ.','ოსტ.'],
+  badge1_t:'სამ-ო დ-ბა!',badge1_s:'სანტ. • 1 სთ',badge2_t:'ოსტ. გ-შია',badge2_s:'~15 წთ',badge3_t:'5 ★!',badge3_s:'ახ. შეფ.',
+  ph_hi:'გამარჯ. ნინო 👋',ph_what:'რა შ. კვ.?',ph_search:'ძიება...',ph_svcs:'სერვ.',ph_curr:'ახ. გამ.',ph_revs:'შეფ.',
+  svc_names:['სანტ.','ელ.','მხ.','ფილ.','HVAC','ხარ.'],
+  ph_job_s:'ვაკე • 14:30',ph_job_tag:'გ-შია',ph_rev1:'"ხ-იანი!"',ph_rn1:'— ნინო ბ.',ph_rev2:'"სწ-ი!"',ph_rn2:'— დ. მ.',
+  how_title:'როგ. <span style="color:var(--or)">ვ-ბთ</span>',how_sub:'4 ნ. — პ. მ-ლია',how_eye:'პ-სი',
+  steps:[['მოთ-ა','ფ-ა ან ზ.'],['ვ. დ-ს','სასურ. დრო'],['ვ. სამ-ს','ოსტ. ჩ-ს'],['კმ-ი!','გ-ა შ-ის']],
+  svcs_title:'ყ. სამ. <span style="color:var(--or)">ერ. ა-ს</span>',svcs_eye:'სერვ.',svcs_sub:'ნ. პრ-ა — სწ. და ხ-ნ.',svcs_all:'ყ. სერვ. →',
+  svc_data:[
+    {t:'სანტექნიკა',d:'გ-ვა, ო-ი, სვ. წ-ი — სრ. სანტ. სამ.'},
+    {t:'ელექტრობა',d:'სოკ., განათ., ელ. სქ. — სერ. ოსტ.'},
+    {t:'მხატვრობა',d:'ინტ./ექსტ. მ., შ-ა, დ. საფ.'},
+    {t:'ფილები / იატ.',d:'კ-კა, ლ-ი, პ-ი — ნ. ფ-ზე.'},
+    {t:'გათ-ბა / კ.',d:'კ. ინ., ბ-ი, გ-ბ. სისტ.'},
+    {t:'ხარ-ო / კ-ბი',d:'კ. ინ., ხის ნ., ა-ბ. გ-ვა.'},
+  ],
+  book_now:'დაჯავშნეთ',
+  cta_h:'ოსტ-ი 30 წ. <span style="color:var(--or)">კ-ში</span>',cta_p:'1 საათში გ. გ. გ-ვ.',
+  login:'შ-ვა',register:'რ-ცია',
+  nav_svcs:'სერვ.',nav_about:'ჩ. შ.',nav_how:'პ-სი',nav_reviews:'შეფ.',
+  // AUTH
+  auth_welcome:'კ. მოგ.',auth_welcome_sub:'გ-ბა! ანგ-ი შ-ვიდეთ.',
+  auth_login:'შ-ვა',auth_reg:'რ-ცია',
+  email:'ელ. ფ-ა',password:'პ-ლი',name:'სახ. და გვ.',phone:'ტ-ი',
+  forgot:'დ-ი?',
+  or_continue:'ან გ-ძ',
+  google_btn:'Google-ით',phone_btn:'ტელ-ით',
+  no_account:'ა. არ გ.?',have_account:'ა. გ.?',
+  choose_role:'როლის ა-ვა',choose_role_sub:'ვ-ა ხ-თ?',
+  role_client:'დ-ხი',role_client_s:'ვ-თ ოსტ-ს',role_master:'ოსტ-ი',role_master_s:'ვ-თ სამ.',
+  verify_phone:'ტ-ის დ-ვა',enter_phone:' შ. ტ-ი',enter_otp:'კ-ი შ-ეთ',otp_sent:'კ-ი გ-ვ.',resend:'ხ. გ.',resend_in:'ხ. გ-ვა',
+  continue:'გ-ა',back:'უ-ი',
+  // DASH COMMON
+  dash_home:'მ. გვ.',dash_orders:'შ-ებები',dash_new:'+ ახ.',dash_masters:'ოსტ-ები',dash_profile:'პ-ი',
+  dash_jobs:'ვ. სამ.',dash_my_jobs:'ჩ. სამ.',dash_earnings:'შ-ვ.',
+  logout:'გ-ვა',settings:'პ-ები',
+  // CLIENT DASH
+  client_welcome:'კ. ნ-ო!',active_orders:'აქ-ური',completed:'დ-ბ.',pending:'მ-ული',total_spent:'დ-ული',
+  new_order:'ახ. შ-ვა',find_master:'ოსტ-ის ძ.',my_orders:'ჩ. შ.',
+  no_orders:'შ-ება ჯ. არ გ.',
+  order_new:'+ ახ. შ-ვა',
+  // MASTER DASH
+  master_welcome:'კ. გ-ო!',new_jobs:'ახ. სამ.',in_progress:'მ-ედ.',my_rating:'ჩ. შეფ.',earnings_m:'შ-ვ. (თვე)',
+  available_jobs:'ხ-ი სამ.',accept:'მ-ება',decline:'უ-ვ.',
+  // PROFILE
+  edit_profile:'რ-ა',save:'შ.',phone_num:'ტ-ი',location:'ადგ.',bio:'ბ-ო',services_offered:'სერვ.',
+  verified:'დ-ული',not_verified:'ა. დ.',
+  // ORDER FORM
+  order_title_label:'ს. სათ.',order_desc_label:'ა-ბა',order_svc_label:'სერვ.',order_address_label:'მ-ობა',order_date_label:'ს-ა. თ.',order_budget_label:'ბ-ი',
+  submit_order:'შ. გ-ა',
+  order_placed:'შ-ა გ-ა!',
+  // EARNINGS
+  total_earn:'საერ. შ.',this_month:'ამ თ.',last_month:'წ. თ.',next_payout:'შ. გ.',
+},
+ru:{
+  available:'Доступны сейчас',
+  hero_h:'Дом в порядке —<br/><span style="color:var(--or)">всегда и быстро</span>',
+  hero_p:'Профессиональные мастера за 30 минут — сантехника, электрика, покраска. Быстро, качественно, честно.',
+  call_master:'Вызвать мастера',see_svcs:'Услуги →',
+  stats:['Заданий','Лет опыта','Довольных','Мастеров'],
+  badge1_t:'Работа завершена!',badge1_s:'Сантехника • 1 ч',badge2_t:'Мастер едет',badge2_s:'~15 минут',badge3_t:'5 звёзд!',badge3_s:'Новый отзыв',
+  ph_hi:'Привет, Нино 👋',ph_what:'Что починить?',ph_search:'Поиск услуги...',ph_svcs:'Услуги',ph_curr:'Текущий вызов',ph_revs:'Отзывы',
+  svc_names:['Сантех.','Электрик','Покраска','Плитка','HVAC','Плотник'],
+  ph_job_s:'Ваке • 14:30',ph_job_tag:'В пути',ph_rev1:'"Отлично!"',ph_rn1:'— Нино Б.',ph_rev2:'"Быстро!"',ph_rn2:'— Д. М.',
+  how_title:'Как мы <span style="color:var(--or)">работаем</span>',how_sub:'4 шага — проблема решена',how_eye:'Процесс',
+  steps:[['Заявка','Форму или звонок'],['Назначаем','Удобное время'],['Работаем','Мастер приедет'],['Довольны!','Потом оплата']],
+  svcs_title:'Все услуги <span style="color:var(--or)">в одном месте</span>',svcs_eye:'Услуги',svcs_sub:'Любая проблема — быстро и качественно.',svcs_all:'Все услуги →',
+  svc_data:[
+    {t:'Сантехника',d:'Течи, краны, санузел — полный спектр работ.'},
+    {t:'Электрика',d:'Розетки, освещение, схемы — сертифицированный.'},
+    {t:'Покраска',d:'Инт./экст. покраска, штукатурка, декор. покрытие.'},
+    {t:'Плитка / Полы',d:'Керамика, ламинат, паркет — любая площадь.'},
+    {t:'Отопление / Кондиц.',d:'Установка, бойлер, система отопления.'},
+    {t:'Плотник / Двери',d:'Установка дверей, изделия, сборка мебели.'},
+  ],
+  book_now:'Заказать',
+  cta_h:'Мастер за 30 мин. <span style="color:var(--or)">у двери</span>',cta_p:'Рассмотрим заявку за 1 час.',
+  login:'Войти',register:'Регистрация',
+  nav_svcs:'Услуги',nav_about:'О нас',nav_how:'Процесс',nav_reviews:'Отзывы',
+  auth_welcome:'Добро пожаловать',auth_welcome_sub:'Войдите или создайте аккаунт.',
+  auth_login:'Войти',auth_reg:'Регистрация',
+  email:'Email',password:'Пароль',name:'Имя и фамилия',phone:'Телефон',
+  forgot:'Забыли пароль?',
+  or_continue:'или продолжить с',
+  google_btn:'Войти через Google',phone_btn:'Войти по номеру телефона',
+  no_account:'Нет аккаунта?',have_account:'Уже есть аккаунт?',
+  choose_role:'Выбор роли',choose_role_sub:'Кем вы являетесь?',
+  role_client:'Заказчик',role_client_s:'Ищу мастера',role_master:'Мастер',role_master_s:'Выполняю заказы',
+  verify_phone:'Подтверждение телефона',enter_phone:'Введите номер телефона',enter_otp:'Введите код из SMS',otp_sent:'Код отправлен на',resend:'Отправить повторно',resend_in:'Повторно через',
+  continue:'Продолжить',back:'Назад',
+  dash_home:'Главная',dash_orders:'Заказы',dash_new:'+ Новый',dash_masters:'Мастера',dash_profile:'Профиль',
+  dash_jobs:'Вакансии',dash_my_jobs:'Мои заказы',dash_earnings:'Заработок',
+  logout:'Выйти',settings:'Настройки',
+  client_welcome:'Добро пожаловать!',active_orders:'Активных',completed:'Завершено',pending:'В ожидании',total_spent:'Потрачено',
+  new_order:'Новый заказ',find_master:'Найти мастера',my_orders:'Мои заказы',
+  no_orders:'Заказов пока нет.',
+  order_new:'+ Новый заказ',
+  master_welcome:'Добро пожаловать!',new_jobs:'Новых',in_progress:'В работе',my_rating:'Мой рейтинг',earnings_m:'Заработок (мес.)',
+  available_jobs:'Доступные заказы',accept:'Принять',decline:'Отказать',
+  edit_profile:'Редактировать',save:'Сохранить',phone_num:'Телефон',location:'Местоположение',bio:'О себе',services_offered:'Услуги',
+  verified:'Подтверждён',not_verified:'Не подтверждён',
+  order_title_label:'Название',order_desc_label:'Описание',order_svc_label:'Услуга',order_address_label:'Адрес',order_date_label:'Желаемое время',order_budget_label:'Бюджет',
+  submit_order:'Разместить заказ',order_placed:'Заказ размещён!',
+  total_earn:'Всего заработано',this_month:'Этот месяц',last_month:'Прошлый мес.',next_payout:'Следующая выплата',
+},
+en:{
+  available:'Available now',
+  hero_h:'Your home, <span style="color:var(--or)">perfectly fixed</span><br/>every time',
+  hero_p:'Professional tradespeople in 30 minutes — plumbing, electrical, painting. Fast, quality, fair pricing.',
+  call_master:'Book a Tradesperson',see_svcs:'Services →',
+  stats:['Jobs Done','Years Exp.','Happy Clients','Tradespeople'],
+  badge1_t:'Job Complete!',badge1_s:'Plumbing • 1 hr',badge2_t:'En route',badge2_s:'~15 min',badge3_t:'5 Stars!',badge3_s:'New review',
+  ph_hi:'Hey, Nino 👋',ph_what:'What needs fixing?',ph_search:'Search a service...',ph_svcs:'Services',ph_curr:'Active Call',ph_revs:'Reviews',
+  svc_names:['Plumbing','Electric','Painting','Tiling','HVAC','Carpentry'],
+  ph_job_s:'Vake • 14:30',ph_job_tag:'En route',ph_rev1:'"Great work!"',ph_rn1:'— Nino B.',ph_rev2:'"Fast & neat!"',ph_rn2:'— D. M.',
+  how_title:'How we <span style="color:var(--or)">work</span>',how_sub:'4 simple steps — problem solved',how_eye:'Process',
+  steps:[['Request','Form or call us'],['We schedule','Pick any time'],['Work done','Master arrives'],["You're happy!",'Pay after']],
+  svcs_title:'All services <span style="color:var(--or)">in one place</span>',svcs_eye:'Services',svcs_sub:'Any home problem — solved fast.',svcs_all:'All Services →',
+  svc_data:[
+    {t:'Plumbing',d:'Leaks, taps, bathroom — full service.'},
+    {t:'Electrical',d:'Sockets, lighting, wiring — certified.'},
+    {t:'Painting',d:'Interior/exterior painting, plastering.'},
+    {t:'Tiling & Flooring',d:'Ceramic, laminate, hardwood — any size.'},
+    {t:'HVAC & Heating',d:'AC install, boiler service, heating.'},
+    {t:'Carpentry & Doors',d:'Door fitting, woodwork, flat-pack.'},
+  ],
+  book_now:'Book Now',
+  cta_h:'Tradesperson in 30 min <span style="color:var(--or)">at your door</span>',cta_p:"We'll review your request within 1 hour.",
+  login:'Log In',register:'Sign Up',
+  nav_svcs:'Services',nav_about:'About',nav_how:'How It Works',nav_reviews:'Reviews',
+  auth_welcome:'Welcome back',auth_welcome_sub:'Sign in or create your account.',
+  auth_login:'Log In',auth_reg:'Sign Up',
+  email:'Email address',password:'Password',name:'Full name',phone:'Phone number',
+  forgot:'Forgot password?',
+  or_continue:'or continue with',
+  google_btn:'Continue with Google',phone_btn:'Continue with Phone',
+  no_account:"Don't have an account?",have_account:'Already have an account?',
+  choose_role:'Choose your role',choose_role_sub:'What describes you best?',
+  role_client:'Client',role_client_s:'I need a tradesperson',role_master:'Tradesperson',role_master_s:'I do the work',
+  verify_phone:'Verify your phone',enter_phone:'Enter your phone number',enter_otp:'Enter the SMS code',otp_sent:'Code sent to',resend:'Resend code',resend_in:'Resend in',
+  continue:'Continue',back:'Back',
+  dash_home:'Home',dash_orders:'Orders',dash_new:'+ New',dash_masters:'Masters',dash_profile:'Profile',
+  dash_jobs:'Jobs',dash_my_jobs:'My Jobs',dash_earnings:'Earnings',
+  logout:'Log Out',settings:'Settings',
+  client_welcome:'Welcome back!',active_orders:'Active',completed:'Completed',pending:'Pending',total_spent:'Total Spent',
+  new_order:'New Order',find_master:'Find Master',my_orders:'My Orders',
+  no_orders:'No orders yet.',
+  order_new:'+ New Order',
+  master_welcome:'Welcome back!',new_jobs:'New Jobs',in_progress:'In Progress',my_rating:'My Rating',earnings_m:'Earnings (month)',
+  available_jobs:'Available Jobs',accept:'Accept',decline:'Decline',
+  edit_profile:'Edit Profile',save:'Save',phone_num:'Phone',location:'Location',bio:'About me',services_offered:'Services',
+  verified:'Verified',not_verified:'Not verified',
+  order_title_label:'Title',order_desc_label:'Description',order_svc_label:'Service type',order_address_label:'Address',order_date_label:'Preferred date/time',order_budget_label:'Budget',
+  submit_order:'Place Order',order_placed:'Order placed!',
+  total_earn:'Total Earned',this_month:'This Month',last_month:'Last Month',next_payout:'Next Payout',
+},
+};
+
+/* ═══════════════════════════════════════════════
+   APP STATE
+═══════════════════════════════════════════════ */
+const S = {
+  lang: detectLang(),
+  user: loadUser(),
+  screen: 'landing',
+  subscreen: 'home',
+  modal: null,
+  authTab: 'login',
+  authRole: 'client',
+  authStep: 'form', // form | otp
+  authPhone: '',
+  otpResend: 30,
+  selectedChips: [],
+  jobs: generateJobs(),
+  clientOrders: loadOrders(),
+  masterJobs: loadMasterJobs(),
+  masterEarnings: {total:3840,month:980,last:1120,next:500,months:[60,80,45,90,75,98,82,65,88,72,90,85]},
+  notifications: 3,
+};
+
+function t(k){ return LANG[S.lang][k] || LANG['en'][k] || k; }
+function detectLang(){
+  const l = (navigator.language||navigator.userLanguage||'en').toLowerCase();
+  if(l.startsWith('ka')) return 'ka';
+  if(l.startsWith('ru')) return 'ru';
+  return 'en';
+}
+function loadUser(){
+  try{ return JSON.parse(localStorage.getItem('fm_user'))||null; }catch(e){return null;}
+}
+function saveUser(u){ S.user=u; try{localStorage.setItem('fm_user',JSON.stringify(u));}catch(e){} }
+function clearUser(){ S.user=null; try{localStorage.removeItem('fm_user');}catch(e){} }
+function loadOrders(){
+  try{ return JSON.parse(localStorage.getItem('fm_orders'))||demoOrders(); }catch(e){return demoOrders();}
+}
+function saveOrders(o){ try{localStorage.setItem('fm_orders',JSON.stringify(o));}catch(e){} }
+function loadMasterJobs(){
+  try{ return JSON.parse(localStorage.getItem('fm_mjobs'))||demoMasterJobs(); }catch(e){return demoMasterJobs();}
+}
+function demoOrders(){
+  return [
+    {id:'o1',title:'Plumbing fix',svc:'plumbing',status:'active',date:'2025-05-20',address:'Vake, Tbilisi',budget:'80–120 ₾',desc:'Kitchen pipe leak under sink.',masterName:'Giorgi K.',masterRating:4.9},
+    {id:'o2',title:'Wall painting',svc:'painting',status:'completed',date:'2025-05-12',address:'Saburtalo',budget:'200–350 ₾',desc:'Two rooms interior painting.',masterName:'Nino A.',masterRating:5.0},
+    {id:'o3',title:'Socket install',svc:'electrical',status:'pending',date:'2025-05-25',address:'Isani',budget:'30–60 ₾',desc:'Install 3 new sockets in bedroom.',masterName:null,masterRating:null},
+  ];
+}
+function demoMasterJobs(){
+  return [
+    {id:'m1',title:'Bathroom retile',svc:'tiling',status:'active',date:'2025-05-21',address:'Vake',budget:'400 ₾',client:'Ana B.',progress:60},
+    {id:'m2',title:'Living room paint',svc:'painting',status:'completed',date:'2025-05-15',address:'Saburtalo',budget:'280 ₾',client:'David M.',progress:100},
+  ];
+}
+function generateJobs(){
+  return [
+    {id:'j1',title:'Kitchen sink leak',svc:'plumbing',desc:'Small leak under kitchen sink, needs pipe tightening or replacement.',address:'Vake, Tbilisi',date:'Today, 15:00–18:00',budget:'50–90 ₾',urgent:true,posted:'2 hrs ago'},
+    {id:'j2',title:'Bedroom sockets x3',svc:'electrical',desc:'Install 3 double sockets in master bedroom. Walls already have conduit.',address:'Saburtalo',date:'Tomorrow, 10:00–13:00',budget:'40–70 ₾',urgent:false,posted:'4 hrs ago'},
+    {id:'j3',title:'Bathroom tiling',svc:'tiling',desc:'Retile shower area ~8m², old tiles removed. Supply tiles yourself.',address:'Isani',date:'26 May, any time',budget:'300–500 ₾',urgent:false,posted:'6 hrs ago'},
+    {id:'j4',title:'2-room apartment paint',svc:'painting',desc:'Two rooms interior painting, approx 60m². Paint colour chosen by client.',address:'Gldani',date:'28–29 May',budget:'200–320 ₾',urgent:false,posted:'Yesterday'},
+    {id:'j5',title:'Emergency burst pipe',svc:'plumbing',desc:'Hot water pipe burst in bathroom. Urgent! Need ASAP.',address:'Didube',date:'ASAP',budget:'80–150 ₾',urgent:true,posted:'30 min ago'},
+    {id:'j6',title:'AC unit install',svc:'hvac',desc:'Install 9000BTU inverter AC. Client supplies unit, needs gas refill too.',address:'Nadzaladevi',date:'30 May',budget:'120–200 ₾',urgent:false,posted:'2 hrs ago'},
+  ];
+}
+
+/* ic() — inject icon with styles */
+function ic(n,w,h){w=w||16;h=h||w;return(I[n]||"").replace("<svg","<svg width=\""+w+"\" height=\""+h+"\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"");}
+
+/* SVG ICONS */
+const I = {
+  wrench:'<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
+  home:'<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  list:'<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+  plus:'<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  users:'<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  user:'<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  briefcase:'<svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>',
+  dollar:'<svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+  settings:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M21 12h-2M5 12H3M18.66 18.66l-1.41-1.41M6.75 6.75L5.34 5.34M12 21v-2M12 5V3"/></svg>',
+  logout_ic:'<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+  bell:'<svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+  x:'<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  arrow_r:'<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+  arrow_l:'<svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  phone:'<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 013.08 4.18 2 2 0 015 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L9.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>',
+  mail:'<svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+  lock:'<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>',
+  eye:'<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  star:'<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/></svg>',
+  location:'<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  cal:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  camera:'<svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  menu:'<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+  lightning:'<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  droplet:'<svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>',
+  brush:'<svg viewBox="0 0 24 24"><path d="M18 11.5a4 4 0 00-7.9.5H8a2 2 0 000 4h6.5A4 4 0 0018 11.5z"/><path d="M10 8.5V4a2 2 0 114 0v4.5"/></svg>',
+  grid:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  wind:'<svg viewBox="0 0 24 24"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>',
+  hammer:'<svg viewBox="0 0 24 24"><path d="M15 12l-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 010-3L12 9"/><path d="M17.64 15L22 10.64"/><path d="M20.35 12.35L16.5 8.5l.75-3.75 3.75-.75 2.04 2.04a1.09 1.09 0 010 1.54l-2.69 2.71z"/></svg>',
+};
+
+/* svc icon helper */
+function svcIcon(svc,size=28){
+  const map = {
+    plumbing:{bg:'#E3F2FD',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><path d="M16 10v8a6 6 0 006 6h4a6 6 0 016 6v8" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="16" cy="10" r="3.5" fill="#1565C0"/><circle cx="32" cy="38" r="3.5" fill="#1565C0"/></svg>`},
+    electrical:{bg:'#FFFDE7',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><polygon points="26,8 14,26 22,26 22,40 34,22 26,22" fill="#F9A825" stroke="#EF6C00" stroke-width="1.5" stroke-linejoin="round"/></svg>`},
+    painting:{bg:'#FCE4EC',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><rect x="17" y="12" width="14" height="4" rx="2" fill="#E91E63"/><rect x="19" y="16" width="10" height="16" rx="1.5" fill="#F48FB1"/><path d="M24 32v5" stroke="#C2185B" stroke-width="3" stroke-linecap="round"/><path d="M20 37h8" stroke="#E91E63" stroke-width="2.5" stroke-linecap="round"/></svg>`},
+    tiling:{bg:'#E8F5E9',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><rect x="10" y="10" width="12" height="12" rx="2.5" fill="#43A047"/><rect x="26" y="10" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="10" y="26" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="26" y="26" width="12" height="12" rx="2.5" fill="#43A047"/></svg>`},
+    hvac:{bg:'#E0F2F1',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="18" rx="6" fill="#00897B"/><rect x="12" y="20" width="24" height="8" rx="4" fill="#4DB6AC"/><circle cx="34" cy="28" r="3" fill="#80CBC4"/></svg>`},
+    carpentry:{bg:'#FFF3E0',svg:`<svg width="${size}" height="${size}" viewBox="0 0 48 48"><path d="M16 32L32 16" stroke="#E65100" stroke-width="3" stroke-linecap="round"/><path d="M12 27l9 9-5 1z" fill="#EF6C00"/></svg>`},
+  };
+  const d = map[svc]||map.carpentry;
+  return `<div style="width:${size+14}px;height:${size+14}px;background:${d.bg};border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">${d.svg}</div>`;
+}
+
+/* ═══════════════════════════════════════════════
+   ROUTER
+═══════════════════════════════════════════════ */
+function navigate(screen, sub='home'){
+  S.screen = screen;
+  S.subscreen = sub;
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function toast(msg, type=''){
+  const w = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className = 'toast'+(type?' '+type:'');
+  el.textContent = msg;
+  w.appendChild(el);
+  setTimeout(()=>{el.style.animation='toast-out .3s ease forwards';setTimeout(()=>el.remove(),300)},2600);
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════ */
+function render(){
+  const app = document.getElementById('app');
+  if(S.screen==='landing') app.innerHTML = renderLanding();
+  else if(S.screen==='auth') app.innerHTML = renderAuth();
+  else if(S.screen==='dash') app.innerHTML = renderDash();
+  bindEvents();
+}
+
+/* ═══════════════════════════════════════════════
+   LANDING
+═══════════════════════════════════════════════ */
+function renderLanding(){
+  const l = S.lang;
+  const svcs = t('svc_data');
+  const svcIcons = [
+    {bg:'#E3F2FD',s:`<svg width="28" height="28" viewBox="0 0 48 48"><path d="M16 10v8a6 6 0 006 6h4a6 6 0 016 6v8" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="16" cy="10" r="3.5" fill="#1565C0"/><circle cx="32" cy="38" r="3.5" fill="#1565C0"/></svg>`},
+    {bg:'#FFFDE7',s:`<svg width="28" height="28" viewBox="0 0 48 48"><polygon points="26,8 14,26 22,26 22,40 34,22 26,22" fill="#F9A825" stroke="#EF6C00" stroke-width="1.5" stroke-linejoin="round"/></svg>`},
+    {bg:'#FCE4EC',s:`<svg width="28" height="28" viewBox="0 0 48 48"><rect x="17" y="12" width="14" height="4" rx="2" fill="#E91E63"/><rect x="19" y="16" width="10" height="16" rx="1.5" fill="#F48FB1"/><path d="M24 32v5" stroke="#C2185B" stroke-width="3" stroke-linecap="round"/></svg>`},
+    {bg:'#E8F5E9',s:`<svg width="28" height="28" viewBox="0 0 48 48"><rect x="10" y="10" width="12" height="12" rx="2.5" fill="#43A047"/><rect x="26" y="10" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="10" y="26" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="26" y="26" width="12" height="12" rx="2.5" fill="#43A047"/></svg>`},
+    {bg:'#E0F2F1',s:`<svg width="28" height="28" viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="18" rx="6" fill="#00897B"/><rect x="12" y="20" width="24" height="8" rx="4" fill="#4DB6AC"/></svg>`},
+    {bg:'#FFF3E0',s:`<svg width="28" height="28" viewBox="0 0 48 48"><path d="M16 32L32 16" stroke="#E65100" stroke-width="3" stroke-linecap="round"/><path d="M12 27l9 9-5 1z" fill="#EF6C00"/></svg>`},
+  ];
+  const phSvcNames = t('svc_names');
+  const steps = t('steps');
+  const stats = t('stats');
+  return `
+<div class="landing">
+<!-- NAV -->
+<nav class="l-nav">
+  <div class="l-nav-inner">
+    <a href="#" class="auth-logo" onclick="return false">
+      <div class="logo-mark">${I.wrench}</div>
+      <div class="logo-name">Fix<span>Master</span></div>
+    </a>
+    <ul class="l-nav-links">
+      <li><a href="#svcs" onclick="scrollTo('#svcs')">${t('nav_svcs')}</a></li>
+      <li><a href="#how" onclick="scrollTo('#how')">${t('nav_how')}</a></li>
+    </ul>
+    <div class="l-nav-r">
+      ${langSw()}
+      <button class="btn btn-ghost btn-sm btn-pill" onclick="navigate('auth')">${t('login')}</button>
+      <button class="btn btn-primary btn-sm btn-pill" onclick="navigate('auth')">${t('register')}</button>
+    </div>
+    <div class="ham" onclick="toast('Меню', '')"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="l-hero">
+  <div class="l-hero-orb1"></div><div class="l-hero-orb2"></div>
+  <div class="l-hero-inner">
+    <div>
+      <div class="l-hero-pill"><div class="l-pill-dot"></div>${t('available')} • Tbilisi</div>
+      <h1 class="l-hero-h">${t('hero_h')}</h1>
+      <p class="l-hero-p">${t('hero_p')}</p>
+      <div class="l-hero-btns">
+        <button class="btn btn-primary btn-lg btn-pill" onclick="navigate('auth')">${I.phone}${t('call_master')}</button>
+        <button class="btn btn-ghost btn-lg btn-pill" onclick="document.getElementById('svcs')?.scrollIntoView({behavior:'smooth'})">${t('see_svcs')}</button>
+      </div>
+      <div class="l-hero-stats">
+        ${[['1400+',stats[0]],['12+',stats[1]],['98%',stats[2]],['35+',stats[3]]].map(([n,l])=>`
+          <div class="stat-card" style="text-align:center"><div class="stat-n or">${n}</div><div class="stat-l">${l}</div></div>`).join('')}
+      </div>
+    </div>
+    <!-- PHONE MOCKUP -->
+    <div class="l-phone">
+      <div class="fc a1"><div class="fc-ic g"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="fc-t">${t('badge1_t')}</div><div class="fc-s">${t('badge1_s')}</div></div></div>
+      <div class="fc a2"><div class="fc-ic b"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><div class="fc-t">${t('badge2_t')}</div><div class="fc-s">${t('badge2_s')}</div></div></div>
+      <div class="fc a3"><div class="fc-ic y"><svg width="14" height="14" viewBox="0 0 24 24" fill="#F9A825" stroke="#F9A825" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="fc-t">${t('badge3_t')}</div><div class="fc-s">${t('badge3_s')}</div></div></div>
+      <div class="l-phone-shell">
+        <div class="l-ph-top"><div class="l-ph-glow"></div><div class="l-ph-greeting">${t('ph_hi')}</div><div class="l-ph-name">${t('ph_what')}</div><div class="l-ph-search">${I.search}<span>${t('ph_search')}</span></div></div>
+        <div class="l-ph-body">
+          <div class="l-ph-slab">${t('ph_svcs')}</div>
+          <div class="l-ph-grid">
+            ${[[`<svg width="22" height="22" viewBox="0 0 48 48"><path d="M16 10v8a6 6 0 006 6h4a6 6 0 016 6v8" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="16" cy="10" r="3.5" fill="#1565C0"/></svg>`,'#E3F2FD'],
+               [`<svg width="22" height="22" viewBox="0 0 48 48"><polygon points="26,8 14,26 22,26 22,40 34,22 26,22" fill="#F9A825" stroke="#EF6C00" stroke-width="1.5" stroke-linejoin="round"/></svg>`,'#FFFDE7'],
+               [`<svg width="22" height="22" viewBox="0 0 48 48"><rect x="17" y="12" width="14" height="4" rx="2" fill="#E91E63"/><rect x="19" y="16" width="10" height="16" rx="1.5" fill="#F48FB1"/></svg>`,'#FCE4EC'],
+               [`<svg width="22" height="22" viewBox="0 0 48 48"><rect x="10" y="10" width="12" height="12" rx="2.5" fill="#43A047"/><rect x="26" y="10" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="10" y="26" width="12" height="12" rx="2.5" fill="#66BB6A"/><rect x="26" y="26" width="12" height="12" rx="2.5" fill="#43A047"/></svg>`,'#E8F5E9'],
+               [`<svg width="22" height="22" viewBox="0 0 48 48"><rect x="8" y="16" width="32" height="18" rx="6" fill="#00897B"/><rect x="12" y="20" width="24" height="8" rx="4" fill="#4DB6AC"/></svg>`,'#E0F2F1'],
+               [`<svg width="22" height="22" viewBox="0 0 48 48"><path d="M16 32L32 16" stroke="#E65100" stroke-width="3" stroke-linecap="round"/><path d="M12 27l9 9-5 1z" fill="#EF6C00"/></svg>`,'#FFF3E0'],
+            ].map(([sv,bg],i)=>`<div class="l-ph-svc" style="cursor:pointer" onclick="navigate('auth')"><svg style="background:${bg};border-radius:8px;display:block;margin:0 auto 3px" width="26" height="26" viewBox="0 0 48 48">${sv}</svg><span>${phSvcNames[i]||''}</span></div>`).join('')}
+          </div>
+          <div class="l-ph-slab">${t('ph_curr')}</div>
+          <div class="l-ph-job"><div class="l-ph-job-ic">${I.wrench}</div><div><div class="l-ph-job-t">Giorgi — Plumbing</div><div class="l-ph-job-s">${t('ph_job_s')}</div></div><div class="l-ph-job-tag">${t('ph_job_tag')}</div></div>
+          <div class="l-ph-slab">${t('ph_revs')}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <div style="background:var(--bg);border-radius:8px;padding:7px"><div style="color:var(--or);font-size:.58rem;letter-spacing:1px;margin-bottom:3px">★★★★★</div><div style="font-size:.58rem;color:var(--txt2)">${t('ph_rev1')}</div><div style="font-size:.56rem;color:var(--txt3);margin-top:2px;font-weight:700">${t('ph_rn1')}</div></div>
+            <div style="background:var(--bg);border-radius:8px;padding:7px"><div style="color:var(--or);font-size:.58rem;letter-spacing:1px;margin-bottom:3px">★★★★★</div><div style="font-size:.58rem;color:var(--txt2)">${t('ph_rev2')}</div><div style="font-size:.56rem;color:var(--txt3);margin-top:2px;font-weight:700">${t('ph_rn2')}</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="l-how" id="how">
+  <div class="l-how-inner">
+    <div class="l-section-eye">${t('how_eye')}</div>
+    <h2 class="l-section-h">${t('how_title')}</h2>
+    <p class="l-section-p">${t('how_sub')}</p>
+    <div class="l-steps">
+      ${steps.map(([title,desc],i)=>{
+        const icons=[`<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>`,
+          `<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+          `<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`,
+          `<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`];
+        return `<div class="l-step"><div class="l-step-num">${icons[i]}</div><div class="l-step-t">${title}</div><div class="l-step-p">${desc}</div></div>`;
+      }).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="l-svcs" id="svcs">
+  <div class="l-svcs-inner">
+    <div class="l-svcs-head">
+      <div><div class="l-section-eye">${t('svcs_eye')}</div><h2 class="l-section-h">${t('svcs_title')}</h2><p class="l-section-p">${t('svcs_sub')}</p></div>
+      <button class="btn btn-ghost btn-pill" onclick="navigate('auth')">${t('svcs_all')}</button>
+    </div>
+    <div class="l-svcs-grid">
+      ${svcs.map((s,i)=>`
+        <div class="l-svc-card" onclick="navigate('auth')">
+          <div class="l-svc-ico" style="background:${svcIcons[i].bg}">${svcIcons[i].s}</div>
+          <div class="l-svc-t">${s.t}</div><div class="l-svc-d">${s.d}</div>
+          <span class="l-svc-lnk">${t('book_now')} ${I.arrow_r}</span>
+        </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="l-cta">
+  <div class="l-cta-inner">
+    <h2>${t('cta_h')}</h2>
+    <p>${t('cta_p')}</p>
+    <div class="l-cta-btns">
+      <button class="btn btn-primary btn-lg btn-pill" onclick="navigate('auth')">${I.phone}${t('call_master')}</button>
+      <button class="btn btn-ghost btn-lg btn-pill" onclick="S.authTab='register';navigate('auth')">${t('register')}</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="l-footer">
+  <div class="l-footer-inner">
+    <div class="lf-brand">
+      <a href="#" class="auth-logo" onclick="return false"><div class="logo-mark">${I.wrench}</div><div class="logo-name">Fix<span>Master</span></div></a>
+      <p>${t('hero_p')}</p>
+      <div class="lf-soc"><a class="lf-sc" href="#">FB</a><a class="lf-sc" href="#">IG</a><a class="lf-sc" href="#">WA</a></div>
+    </div>
+    <div><div class="lf-col-t">${t('svcs_eye')}</div><ul class="lf-links">${svcs.map(s=>`<li><a href="#" onclick="navigate('auth');return false">${s.t}</a></li>`).join('')}</ul></div>
+    <div><div class="lf-col-t">${t('nav_about')}</div><ul class="lf-links"><li><a href="#">${t('nav_about')}</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+    <div><div class="lf-col-t">${t('nav_svcs')}</div><ul class="lf-links"><li><a href="tel:+99555500000">+995 555 000 000</a></li><li><a href="#">hello@fixmaster.ge</a></li></ul></div>
+  </div>
+  <div class="l-footer-bot"><p>© 2025 <span>FixMaster</span></p><p>${langSw()}</p></div>
+</footer>
+</div>`;
+}
+
+/* ═══════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════ */
+function renderAuth(){
+  return `
+<div class="auth-page">
+  <div class="auth-nav">
+    <a href="#" class="auth-logo" onclick="navigate('landing');return false"><div class="logo-mark">${I.wrench}</div><div class="logo-name">Fix<span>Master</span></div></a>
+    ${langSw()}
+  </div>
+  <div class="auth-content">
+    ${S.authStep==='otp' ? renderOTP() : S.authStep==='role' ? renderRoleSelect() : renderAuthForm()}
+  </div>
+</div>`;
+}
+
+function renderAuthForm(){
+  const isLogin = S.authTab==='login';
+  return `
+<div class="auth-card">
+  <div class="s20 boldest" style="margin-bottom:4px">${t('auth_welcome')}</div>
+  <div class="s13 txt2 mb16">${t('auth_welcome_sub')}</div>
+  <div class="tabs">
+    <button class="tab-btn ${isLogin?'active':''}" onclick="S.authTab='login';render()">${t('auth_login')}</button>
+    <button class="tab-btn ${!isLogin?'active':''}" onclick="S.authTab='register';render()">${t('auth_reg')}</button>
+  </div>
+  ${!isLogin?`<div class="f-group"><label class="f-label">${t('name')}</label><div class="f-inp-icon"><div class="ic">${I.user}</div><input id="a-name" class="f-inp" type="text" placeholder="Giorgi Beridze"/></div></div>`:''}
+  <div class="f-group"><label class="f-label">${t('email')}</label><div class="f-inp-icon"><div class="ic">${I.mail}</div><input id="a-email" class="f-inp" type="email" placeholder="you@example.com"/></div></div>
+  <div class="f-group"><label class="f-label">${t('password')}</label><div class="f-inp-icon"><div class="ic">${I.lock}</div><input id="a-pass" class="f-inp" type="password" placeholder="••••••••"/></div></div>
+  ${isLogin?`<div style="text-align:right;margin-bottom:14px"><button style="background:none;border:none;cursor:pointer;color:var(--or);font-size:.78rem;font-weight:700;font-family:inherit">${t('forgot')}</button></div>`:''}
+  <button class="btn btn-primary btn-full btn-pill btn-lg" onclick="doEmailAuth()" style="margin-bottom:6px">${isLogin?t('auth_login'):t('continue')}</button>
+  <div class="divider"><span>${t('or_continue')}</span></div>
+  <button class="soc-btn" onclick="doGoogleAuth()">${googleSVG()}${t('google_btn')}</button>
+  <button class="soc-btn" onclick="S.authStep='phone';render()">${I.phone}${t('phone_btn')}</button>
+  <div style="text-align:center;font-size:.78rem;color:var(--txt2);margin-top:6px">
+    ${isLogin?t('no_account'):t('have_account')}
+    <button style="background:none;border:none;cursor:pointer;color:var(--or);font-weight:800;font-size:.78rem;font-family:inherit" onclick="S.authTab='${isLogin?'register':'login'}';render()">${isLogin?t('auth_reg'):t('auth_login')}</button>
+  </div>
+</div>`;
+}
+
+function renderRoleSelect(){
+  return `
+<div class="auth-card">
+  <button class="btn btn-ghost btn-sm btn-pill mb16" onclick="S.authStep='form';render()" style="margin-bottom:16px">← ${t('back')}</button>
+  <div class="s20 boldest mb8">${t('choose_role')}</div>
+  <div class="s13 txt2" style="margin-bottom:20px">${t('choose_role_sub')}</div>
+  <div class="auth-role-grid">
+    <div class="auth-role-card ${S.authRole==='client'?'sel':''}" onclick="S.authRole='client';render()">
+      <div class="arc-ico" style="background:var(--blu-lt)">${ic('users',26)}</div>
+      <div class="arc-t">${t('role_client')}</div>
+      <div class="arc-s">${t('role_client_s')}</div>
+    </div>
+    <div class="auth-role-card ${S.authRole==='master'?'sel':''}" onclick="S.authRole='master';render()">
+      <div class="arc-ico" style="background:var(--or-lt)">${ic('wrench',26)}</div>
+      <div class="arc-t">${t('role_master')}</div>
+      <div class="arc-s">${t('role_master_s')}</div>
+    </div>
+  </div>
+  <button class="btn btn-primary btn-full btn-pill btn-lg" onclick="completeRegistration()">${t('continue')}</button>
+</div>`;
+}
+
+function renderOTP(){
+  const back = `<button class="btn btn-ghost btn-sm btn-pill" onclick="S.authStep='form';S.authPhone='';render()" style="margin-bottom:16px">← ${t('back')}</button>`;
+  const title = `<div class="s20 boldest mb8">${t('verify_phone')}</div>`;
+
+  // Step 1 — enter phone number
+  if(!S.authPhone){
+    const otpIcons = ic('phone',16);
+    const mailIcon = ic('mail',16);
+    return '<div class="auth-card otp-screen">' + back + title +
+      '<div class="f-group"><label class="f-label">' + t('enter_phone') + '</label>' +
+      '<div class="f-inp-icon"><div class="ic">' + otpIcons + '</div>' +
+      '<input id="a-phone" class="f-inp" type="tel" placeholder="+995 5xx xxx xxx"/></div></div>' +
+      '<button class="btn btn-primary btn-full btn-pill btn-lg" style="margin-bottom:12px" onclick="sendOTP()">' + t('continue') + '</button>' +
+      '<div class="divider"><span>' + t('or_continue') + '</span></div>' +
+      '<button class="soc-btn" onclick="S.authStep=\'form\';S.authPhone=\'\';render()">' + mailIcon + t('email') + '</button>' +
+      '<button class="soc-btn" onclick="doGoogleAuth()">' + googleSVG() + t('google_btn') + '</button>' +
+      '</div>';
+  }
+
+  // Step 2 — enter OTP code
+  const otpInputs = [1,2,3,4,5,6].map(function(i){
+    return '<input class="otp-inp" id="otp' + i + '" maxlength="1" type="text" inputmode="numeric" ' +
+      'oninput="otpInput(this,' + i + ')" onkeydown="otpKey(event,' + i + ')" />';
+  }).join('');
+
+  return '<div class="auth-card otp-screen">' + back + title +
+    '<div class="phone-display">' + t('otp_sent') + ': <strong>' + S.authPhone + '</strong></div>' +
+    '<div class="otp-hint">' + t('enter_otp') + '</div>' +
+    '<div class="otp-wrap" id="otpWrap">' + otpInputs + '</div>' +
+    '<div class="resend-row">' +
+    '<span class="resend-count" id="resendCount">' + t('resend_in') + ' 30s</span>' +
+    '<button class="resend-btn" id="resendBtn" disabled onclick="resendOTP()">' + t('resend') + '</button>' +
+    '</div>' +
+    '<button class="btn btn-primary btn-full btn-pill btn-lg" style="margin-top:16px" onclick="verifyOTP()">' + t('continue') + '</button>' +
+    '</div>';
+}
+
+function googleSVG(){
+  return `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.3 30.2 0 24 0 14.7 0 6.8 5.5 2.7 13.6l8 6.2C12.5 13 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.7-.1-3.3-.4-4.9H24v9.3h12.6c-.5 2.9-2.2 5.3-4.6 6.9l7.2 5.6c4.2-3.9 6.7-9.6 7.3-16.9z"/><path fill="#FBBC05" d="M10.7 28.5c-1-2.9-1-6.1 0-9L2.7 13.4C-.9 19.5-.9 27 2.7 33.1l8-4.6z"/><path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.7l-7.2-5.6c-2.2 1.5-5.1 2.3-8.8 2.3-6.2 0-11.5-4.2-13.3-10l-8 6.2C6.8 42.5 14.7 48 24 48z"/></svg>`;
+}
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════ */
+function renderDash(){
+  if(!S.user) { navigate('auth'); return ''; }
+  const isClient = S.user.role==='client';
+  const navItems = isClient ? [
+    {id:'home',icon:'home',label:t('dash_home')},
+    {id:'new',icon:'plus',label:t('dash_new')},
+    {id:'orders',icon:'list',label:t('dash_orders'),badge:S.clientOrders.filter(o=>o.status==='active').length},
+    {id:'masters',icon:'users',label:t('dash_masters')},
+    {id:'profile',icon:'user',label:t('dash_profile')},
+  ] : [
+    {id:'home',icon:'home',label:t('dash_home')},
+    {id:'jobs',icon:'briefcase',label:t('dash_jobs'),badge:S.jobs.filter(j=>!j.accepted).length},
+    {id:'myjobs',icon:'list',label:t('dash_my_jobs')},
+    {id:'earnings',icon:'dollar',label:t('dash_earnings')},
+    {id:'profile',icon:'user',label:t('dash_profile')},
+  ];
+  const content = isClient ? renderClientContent() : renderMasterContent();
+  const pageTitle = navItems.find(n=>n.id===S.subscreen)?.label || t('dash_home');
+  const initials = (S.user.name||'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  return `
+<div class="dash">
+  <!-- SIDEBAR -->
+  <aside class="dash-side" id="dashSide">
+    <div class="ds-top">
+      <a href="#" class="auth-logo" onclick="navigate('landing');return false" style="margin-bottom:0"><div class="logo-mark" style="width:30px;height:30px"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><div class="logo-name" style="font-size:.95rem">Fix<span>Master</span></div></a>
+      <div class="ds-user" onclick="navigate('dash','profile')">
+        <div class="ava ava40 ava-or" style="font-size:.88rem">${initials}</div>
+        <div class="ds-user-info"><div class="ds-user-name">${S.user.name||'User'}</div><div class="ds-user-role">${isClient?t('role_client'):t('role_master')}</div></div>
+      </div>
+    </div>
+    <nav class="ds-nav">
+      ${navItems.map(n=>`
+        <a href="#" onclick="navigate('dash','${n.id}');closeMobDrawer();return false" class="${S.subscreen===n.id?'active':''}">
+          ${ic(n.icon,17)}
+          ${n.label}
+          ${n.badge?`<span class="ds-badge">${n.badge}</span>`:''}
+        </a>`).join('')}
+      <div class="ds-nav-section">${t('settings')}</div>
+      <a href="#" onclick="navigate('dash','profile');closeMobDrawer();return false" class="${S.subscreen==='settings'?'active':''}">
+        ${ic('settings',17)}${t('settings')}
+      </a>
+    </nav>
+    <div class="ds-bottom">${langSw('small')}<button class="ds-logout" onclick="doLogout()" style="margin-top:8px">${ic('logout_ic',17)}${t('logout')}</button></div>
+  </aside>
+
+  <!-- MOBILE DRAWER BG -->
+  <div class="mob-drawer-bg" id="mobDrawerBg" onclick="closeMobDrawer()"></div>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <!-- Desktop topbar -->
+    <div class="dash-topbar">
+      <div class="dash-topbar-l"><div class="dash-page-title">${pageTitle}</div></div>
+      <div class="dash-topbar-r">
+        ${langSw('small')}
+        <button class="notif-btn" onclick="toast('${S.notifications} уведомления', 'or')">${ic('bell',17)}${S.notifications?'<div class="notif-dot"></div>':''}</button>
+        <div class="ava ava32 ava-or" style="cursor:pointer" onclick="navigate('dash','profile')">${initials}</div>
+      </div>
+    </div>
+    <!-- Mobile topbar -->
+    <div class="mob-topbar">
+      <button class="mob-menu-btn" onclick="openMobDrawer()">${ic('menu',17)}</button>
+      <a href="#" class="auth-logo" onclick="navigate('landing');return false" style="gap:7px"><div class="logo-mark" style="width:28px;height:28px"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><div class="logo-name" style="font-size:.9rem">Fix<span>Master</span></div></a>
+      <button class="notif-btn" onclick="toast('${S.notifications} notifications','or')" style="position:relative">${ic('bell',17)}${S.notifications?'<div class="notif-dot"></div>':''}</button>
+    </div>
+    <!-- Page content -->
+    <div class="dash-content">${content}</div>
+  </main>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <div class="mob-nav">
+    <div class="mob-nav-inner">
+      ${navItems.map(n=>`
+        <button class="mob-nav-btn ${S.subscreen===n.id?'active':''}" onclick="navigate('dash','${n.id}')">
+          ${ic(n.icon,17)}
+          <span>${n.label}</span>
+          ${n.badge?`<div class="mob-nav-badge"></div>`:''}
+        </button>`).join('')}
+    </div>
+  </div>
+</div>`;
+}
+
+/* ─── CLIENT SCREENS ─── */
+function renderClientContent(){
+  switch(S.subscreen){
+    case 'new': return renderNewOrder();
+    case 'orders': return renderClientOrders();
+    case 'masters': return renderMasters();
+    case 'profile': return renderProfile();
+    default: return renderClientHome();
+  }
+}
+function renderClientHome(){
+  const orders = S.clientOrders;
+  const active = orders.filter(o=>o.status==='active').length;
+  const done = orders.filter(o=>o.status==='completed').length;
+  const pend = orders.filter(o=>o.status==='pending').length;
+  const spent = orders.filter(o=>o.status==='completed').reduce((_,__,i)=>`${(i+1)*85} ₾`,0);
+  return `
+<div class="dash-h">${t('client_welcome')} 👋</div>
+<div class="dash-p">${new Date().toLocaleDateString(S.lang==='ka'?'ka-GE':S.lang==='ru'?'ru-RU':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-n or">${active}</div><div class="stat-l">${t('active_orders')}</div>${active>0?'<div class="stat-trend up">● Live</div>':''}</div>
+  <div class="stat-card"><div class="stat-n">${done}</div><div class="stat-l">${t('completed')}</div><div class="stat-trend up">↑ ${done}</div></div>
+  <div class="stat-card"><div class="stat-n">${pend}</div><div class="stat-l">${t('pending')}</div></div>
+  <div class="stat-card"><div class="stat-n" style="font-size:1.4rem">${spent||'0 ₾'}</div><div class="stat-l">${t('total_spent')}</div></div>
+</div>
+<div class="flex gap12 mb24">
+  <button class="btn btn-primary btn-pill flex-1" onclick="navigate('dash','new')">${I.plus}${t('new_order')}</button>
+  <button class="btn btn-ghost btn-pill flex-1" onclick="navigate('dash','masters')">${I.search}${t('find_master')}</button>
+</div>
+<div class="section-head"><div class="section-title">${t('my_orders')}</div><button class="btn btn-ghost btn-sm btn-pill" onclick="navigate('dash','orders')">${t('dash_orders')} →</button></div>
+${orders.length===0?`<div class="card" style="text-align:center;padding:2rem;color:var(--txt2)">${t('no_orders')}<br><br><button class="btn btn-primary btn-pill" onclick="navigate('dash','new')">${t('order_new')}</button></div>`:
+  orders.slice(0,3).map(o=>renderOrderCard(o)).join('')}`;
+}
+function renderOrderCard(o){
+  const statusMap = {active:{cls:'badge-or',label:t('active_orders')},completed:{cls:'badge-grn',label:t('completed')},pending:{cls:'badge-txt',label:t('pending')}};
+  const st = statusMap[o.status]||statusMap.pending;
+  return `
+<div class="job-card mb12" onclick="toast('${o.title}','')">
+  <div class="jc-head">
+    <div>${svcIcon(o.svc,22)}</div>
+    <div style="flex:1;min-width:0;margin-left:10px"><div class="jc-title">${o.title}</div><div class="jc-sub">${o.date}</div></div>
+    <span class="badge ${st.cls}">${st.label}</span>
+  </div>
+  <div class="jc-body">${o.desc}</div>
+  <div class="jc-foot">
+    <div class="jc-meta">${ic('location',13)} ${o.address}</div>
+    <div class="jc-price">${o.budget}</div>
+  </div>
+  ${o.masterName?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr);display:flex;align-items:center;gap:8px"><div class="ava ava32 ava-or">${o.masterName[0]}</div><div><div style="font-size:.78rem;font-weight:700">${o.masterName}</div><div class="stars" style="font-size:.65rem">${'★'.repeat(Math.floor(o.masterRating))}</div></div></div>`:''}
+</div>`;
+}
+function renderClientOrders(){
+  return `
+<div class="dash-h">${t('dash_orders')}</div>
+<div class="dash-p" style="margin-bottom:1rem">${S.clientOrders.length} ${t('dash_orders').toLowerCase()}</div>
+<div class="flex gap8 mb16">
+  <button class="chip sel" onclick="filterOrders(null,this)">${t('dash_home').split(' ')[0]||'All'}</button>
+  <button class="chip" onclick="filterOrders('active',this)">${t('active_orders')}</button>
+  <button class="chip" onclick="filterOrders('pending',this)">${t('pending')}</button>
+  <button class="chip" onclick="filterOrders('completed',this)">${t('completed')}</button>
+</div>
+<div id="ordersContainer">${S.clientOrders.map(o=>renderOrderCard(o)).join('')||`<div class="card" style="text-align:center;padding:2rem;color:var(--txt2)">${t('no_orders')}</div>`}</div>
+<button class="btn btn-primary btn-full btn-pill" style="margin-top:12px" onclick="navigate('dash','new')">${I.plus} ${t('order_new')}</button>`;
+}
+function renderNewOrder(){
+  const svcData = t('svc_data');
+  const svcs = ['plumbing','electrical','painting','tiling','hvac','carpentry'];
+  return `
+<div class="dash-h">${t('new_order')}</div>
+<div class="dash-p mb16">${t('order_desc_label')}</div>
+<div class="card" style="padding:1.5rem">
+  <div class="f-group"><label class="f-label">${t('order_title_label')}</label><input id="o-title" class="f-inp" type="text" placeholder="${svcData[0]?.t||'Service title'}"/></div>
+  <div class="f-group"><label class="f-label">${t('order_svc_label')}</label>
+    <div class="chips mb8" id="svcChips">
+      ${svcData.map((s,i)=>`<div class="chip ${S.selectedChips.includes(svcs[i])?'sel':''}" onclick="toggleChip('${svcs[i]}',this)">${svcIcon(svcs[i],18)} ${s.t}</div>`).join('')}
+    </div>
+  </div>
+  <div class="f-group"><label class="f-label">${t('order_desc_label')}</label><textarea id="o-desc" class="f-inp" placeholder="Describe the problem in detail..."></textarea></div>
+  <div class="f-row2">
+    <div class="f-group"><label class="f-label">${t('order_address_label')}</label><div class="f-inp-icon"><div class="ic">${I.location}</div><input id="o-addr" class="f-inp" type="text" placeholder="Vake, Tbilisi"/></div></div>
+    <div class="f-group"><label class="f-label">${t('order_budget_label')}</label><div class="f-inp-icon"><div class="ic">${I.dollar}</div><input id="o-budget" class="f-inp" type="text" placeholder="50–200 ₾"/></div></div>
+  </div>
+  <div class="f-group"><label class="f-label">${t('order_date_label')}</label><div class="f-inp-icon"><div class="ic">${I.cal}</div><input id="o-date" class="f-inp" type="text" placeholder="Today, any time"/></div></div>
+  <div class="notice notice-or mb16"><svg fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><p>After placing, masters will send you offers within 30 minutes.</p></div>
+  <button class="btn btn-primary btn-full btn-pill btn-lg" onclick="submitOrder()">${I.check}${t('submit_order')}</button>
+</div>`;
+}
+function renderMasters(){
+  const masters = [
+    {id:'m1',name:'Giorgi Kapanadze',svc:'Plumbing',rating:4.9,reviews:87,price:'From 40 ₾/hr',exp:'8 yrs',verified:true,color:'ava-or'},
+    {id:'m2',name:'Nino Avaliani',svc:'Painting',rating:5.0,reviews:52,price:'From 60 ₾/hr',exp:'5 yrs',verified:true,color:'ava-grn'},
+    {id:'m3',name:'David Metreveli',svc:'Electrical',rating:4.7,reviews:134,price:'From 35 ₾/hr',exp:'11 yrs',verified:true,color:'ava-blu'},
+    {id:'m4',name:'Ana Beridze',svc:'Tiling',rating:4.8,reviews:41,price:'From 50 ₾/hr',exp:'6 yrs',verified:false,color:'ava-or'},
+    {id:'m5',name:'Luka Jgenti',svc:'HVAC',rating:4.9,reviews:66,price:'From 55 ₾/hr',exp:'9 yrs',verified:true,color:'ava-grn'},
+    {id:'m6',name:'Tamari Chikava',svc:'Carpentry',rating:4.6,reviews:29,price:'From 45 ₾/hr',exp:'7 yrs',verified:false,color:'ava-or'},
+  ];
+  return `
+<div class="dash-h">${t('dash_masters')}</div>
+<div class="dash-p mb16">${masters.length} ${t('dash_masters').toLowerCase()}</div>
+<div class="f-inp-icon mb16"><div class="ic">${I.search}</div><input class="f-inp" type="search" placeholder="Search masters..."/></div>
+<div class="chips mb20">
+  ${['All','Plumbing','Electrical','Painting','Tiling','HVAC','Carpentry'].map((s,i)=>`<div class="chip ${i===0?'sel':''}" onclick="document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));this.classList.add('sel')">${s}</div>`).join('')}
+</div>
+${masters.map(m=>`
+  <div class="master-card mb12" onclick="toast('${m.name} — ${m.svc}','')">
+    <div class="ava ava56 ${m.color}">${m.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+    <div class="mc-info">
+      <div style="display:flex;align-items:center;gap:6px"><div class="mc-name">${m.name}</div>${m.verified?'<span class="badge badge-grn" style="font-size:.58rem">'+ic("check",10)+' '+t("verified")+'</span>':''}</div>
+      <div class="mc-svc">${m.svc} • ${m.exp} ${t('stat_label_2')||'exp'}</div>
+      <div class="mc-stars">${'★★★★★'.slice(0,Math.floor(m.rating))}<span class="mc-star-n ml4" style="margin-left:4px">${m.rating}</span><span class="mc-rev-n" style="margin-left:3px">(${m.reviews})</span></div>
+      <div class="mc-price" style="margin-top:4px">${m.price}</div>
+    </div>
+    <button class="btn btn-primary btn-sm btn-pill" onclick="event.stopPropagation();navigate('dash','new')">${t('book_now')||'Book'}</button>
+  </div>`).join('')}`;
+}
+
+/* ─── MASTER SCREENS ─── */
+function renderMasterContent(){
+  switch(S.subscreen){
+    case 'jobs': return renderAvailableJobs();
+    case 'myjobs': return renderMyJobs();
+    case 'earnings': return renderEarnings();
+    case 'profile': return renderProfile();
+    default: return renderMasterHome();
+  }
+}
+function renderMasterHome(){
+  const mj = S.masterJobs;
+  const active = mj.filter(j=>j.status==='active').length;
+  const done = mj.filter(j=>j.status==='completed').length;
+  const newJ = S.jobs.filter(j=>!j.accepted).length;
+  const e = S.masterEarnings;
+  return `
+<div class="dash-h">${t('master_welcome')} 👋</div>
+<div class="dash-p">${new Date().toLocaleDateString(S.lang==='ka'?'ka-GE':S.lang==='ru'?'ru-RU':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-n or">${newJ}</div><div class="stat-l">${t('new_jobs')}</div>${newJ?'<div class="stat-trend up">● New</div>':''}</div>
+  <div class="stat-card"><div class="stat-n">${active}</div><div class="stat-l">${t('in_progress')}</div></div>
+  <div class="stat-card"><div class="stat-n">4.9 ★</div><div class="stat-l">${t('my_rating')}</div><div class="stat-trend up">↑ Excellent</div></div>
+  <div class="stat-card"><div class="stat-n or" style="font-size:1.4rem">${e.month} ₾</div><div class="stat-l">${t('earnings_m')}</div></div>
+</div>
+<div class="section-head mb12"><div class="section-title">${t('available_jobs')}</div><button class="btn btn-ghost btn-sm btn-pill" onclick="navigate('dash','jobs')">${t('dash_jobs')} →</button></div>
+${S.jobs.filter(j=>!j.accepted).slice(0,3).map(j=>renderJobCard(j,true)).join('')}`;
+}
+function renderAvailableJobs(){
+  const jobs = S.jobs.filter(j=>!j.accepted);
+  return `
+<div class="dash-h">${t('available_jobs')}</div>
+<div class="dash-p mb16">${jobs.length} ${t('available_jobs').toLowerCase()}</div>
+<div class="chips mb16">
+  ${['All','Urgent','Plumbing','Electrical','Painting','Tiling','HVAC','Carpentry'].map((s,i)=>`<div class="chip ${i===0?'sel':''}" onclick="document.querySelectorAll('#jobChips .chip').forEach(c=>c.classList.remove('sel'));this.classList.add('sel')" id="${i===0?'selChip':''}">${i===1?'🔥 ':''} ${s}</div>`).join('')}
+</div>
+${jobs.length===0?`<div class="card" style="text-align:center;padding:2rem;color:var(--txt2)">No available jobs right now. Check back soon!</div>`:
+  jobs.map(j=>renderJobCard(j,true)).join('')}`;
+}
+function renderJobCard(j,showActions=false){
+  return `
+<div class="job-card mb12 ${j.selected?'selected':''}" id="jc-${j.id}">
+  <div class="jc-head">
+    <div>${svcIcon(j.svc,22)}</div>
+    <div style="flex:1;min-width:0;margin-left:10px">
+      <div class="jc-title">${j.title} ${j.urgent?'<span class="badge badge-red">🔥 Urgent</span>':''}</div>
+      <div class="jc-sub">${j.posted}</div>
+    </div>
+    <div class="jc-price">${j.budget}</div>
+  </div>
+  <div class="jc-body">${j.desc}</div>
+  <div class="jc-foot">
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="jc-meta">${ic('location',13)} ${j.address}</div>
+      <div class="jc-meta">${ic('clock',13)} ${j.date}</div>
+    </div>
+  </div>
+  ${showActions?`
+  <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr)">
+    <button class="btn btn-grn btn-sm btn-pill flex-1" onclick="acceptJob('${j.id}')">${I.check}${t('accept')}</button>
+    <button class="btn btn-danger btn-sm btn-pill" onclick="declineJob('${j.id}')">${I.x}</button>
+  </div>`:''}
+</div>`;
+}
+function renderMyJobs(){
+  const jobs = S.masterJobs;
+  return `
+<div class="dash-h">${t('dash_my_jobs')}</div>
+<div class="dash-p mb16">${jobs.length} ${t('dash_my_jobs').toLowerCase()}</div>
+${jobs.length===0?`<div class="card" style="text-align:center;padding:2rem;color:var(--txt2)">No active jobs yet.</div>`:
+  jobs.map(j=>`
+  <div class="job-card mb12">
+    <div class="jc-head">
+      <div>${svcIcon(j.svc,22)}</div>
+      <div style="flex:1;min-width:0;margin-left:10px"><div class="jc-title">${j.title}</div><div class="jc-sub">Client: ${j.client} • ${j.date}</div></div>
+      <span class="badge ${j.status==='active'?'badge-or':'badge-grn'}">${j.status==='active'?t('in_progress'):t('completed')}</span>
+    </div>
+    ${j.status==='active'?`
+    <div style="margin:10px 0 4px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="s12 bold">Progress</span><span class="s12 bold orange">${j.progress}%</span></div>
+    <div style="height:6px;background:var(--bg2);border-radius:3px;overflow:hidden"><div style="height:100%;width:${j.progress}%;background:linear-gradient(90deg,var(--or),var(--or2));border-radius:3px;transition:width .5s"></div></div></div>`:''}
+    <div class="jc-foot" style="margin-top:10px">
+      <div class="jc-meta">${ic('location',13)} ${j.address}</div>
+      <div class="jc-price">${j.budget}</div>
+    </div>
+  </div>`).join('')}`;
+}
+function renderEarnings(){
+  const e = S.masterEarnings;
+  const months = S.lang==='ru'?['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']:
+    S.lang==='ka'?['იან','თებ','მარ','აპრ','მაი','ივნ','ივლ','აგვ','სექ','ოქტ','ნოე','დეკ']:
+    ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const maxVal = Math.max(...e.months);
+  const curMonth = new Date().getMonth();
+  return `
+<div class="dash-h">${t('dash_earnings')}</div>
+<div class="stats-grid" style="margin-bottom:1.25rem">
+  <div class="stat-card"><div class="stat-n or" style="font-size:1.5rem">${e.total} ₾</div><div class="stat-l">${t('total_earn')}</div></div>
+  <div class="stat-card"><div class="stat-n or" style="font-size:1.5rem">${e.month} ₾</div><div class="stat-l">${t('this_month')}</div><div class="stat-trend up">↑ vs ${e.last} ₾</div></div>
+  <div class="stat-card"><div class="stat-n">${e.last} ₾</div><div class="stat-l">${t('last_month')}</div></div>
+  <div class="stat-card"><div class="stat-n or">${e.next} ₾</div><div class="stat-l">${t('next_payout')}</div><div class="stat-trend up">In 3 days</div></div>
+</div>
+<div class="card p20 mb16">
+  <div class="section-title mb16">2025 ${t('total_earn')}</div>
+  <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding:0 4px">
+    ${e.months.map((v,i)=>{
+      const h = Math.max(8, Math.round((v/maxVal)*100));
+      return `<div class="earnings-month"><div class="earnings-bar ${i===curMonth?'active':''}" style="height:${h}%;"></div><div class="earnings-bar-lbl">${months[i]}</div></div>`;
+    }).join('')}
+  </div>
+</div>
+<div class="card p20">
+  <div class="section-title mb12">Recent Transactions</div>
+  ${[
+    {title:'Bathroom retile — Ana B.',date:'20 May',amount:'+400 ₾',type:'grn'},
+    {title:'Living room paint — David M.',date:'15 May',amount:'+280 ₾',type:'grn'},
+    {title:'Socket install — Nino G.',date:'10 May',amount:'+60 ₾',type:'grn'},
+    {title:'Payout to bank',date:'5 May',amount:'−500 ₾',type:'red'},
+  ].map(tx=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr)">
+      <div><div class="s13 bold">${tx.title}</div><div class="s11 txt3">${tx.date}</div></div>
+      <div class="bold s14" style="color:var(--${tx.type})">${tx.amount}</div>
+    </div>`).join('')}
+</div>`;
+}
+
+/* ─── SHARED PROFILE ─── */
+function renderProfile(){
+  const u = S.user;
+  const isClient = u.role==='client';
+  const initials = (u.name||'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  return `
+<div class="profile-top">
+  <div style="position:relative">
+    <div class="ava ava80 ava-or">${initials}</div>
+    <button style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:var(--or);border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border-style:solid" onclick="toast('${t('camera')||'Change photo'}','')">
+      ${ic('camera',13)}
+    </button>
+  </div>
+  <div>
+    <div class="profile-name">${u.name||'User'}</div>
+    <span class="profile-role-tag">${isClient?t('role_client'):t('role_master')}</span>
+    <div class="verified-badge">${ic('check',12)} ${t('verified')}</div>
+    <div class="profile-sub">${u.email||u.phone||''}</div>
+  </div>
+</div>
+
+<div class="card mb12">
+  <div style="padding:16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between"><div class="section-title">${t('edit_profile')}</div><button class="btn btn-ghost btn-sm btn-pill" onclick="saveProfile()">${I.check}${t('save')}</button></div>
+  <div style="padding:16px">
+    <div class="f-group"><label class="f-label">${t('name')}</label><div class="f-inp-icon"><div class="ic">${I.user}</div><input id="p-name" class="f-inp" value="${u.name||''}"/></div></div>
+    <div class="f-row2">
+      <div class="f-group"><label class="f-label">${t('email')}</label><div class="f-inp-icon"><div class="ic">${I.mail}</div><input id="p-email" class="f-inp" type="email" value="${u.email||''}"/></div></div>
+      <div class="f-group"><label class="f-label">${t('phone_num')}</label><div class="f-inp-icon"><div class="ic">${I.phone}</div><input id="p-phone" class="f-inp" value="${u.phone||'+995 555 000 000'}"/></div></div>
+    </div>
+    <div class="f-group"><label class="f-label">${t('location')}</label><div class="f-inp-icon"><div class="ic">${I.location}</div><input id="p-loc" class="f-inp" value="${u.location||'Tbilisi, Georgia'}"/></div></div>
+    <div class="f-group"><label class="f-label">${t('bio')}</label><textarea id="p-bio" class="f-inp">${u.bio||''}</textarea></div>
+    ${!isClient?`<div class="f-group"><label class="f-label">${t('services_offered')}</label><div class="chips">${['plumbing','electrical','painting','tiling','hvac','carpentry'].map((s,i)=>`<div class="chip ${(u.services||[]).includes(s)?'sel':''}" onclick="this.classList.toggle('sel')">${svcIcon(s,16)} ${t('svc_data')[i]?.t||s}</div>`).join('')}</div></div>`:''}
+  </div>
+</div>
+
+<div class="card">
+  <div style="padding:16px;border-bottom:1px solid var(--bdr)"><div class="section-title">${t('settings')}</div></div>
+  ${[
+    [t('lang_pref')||'Language',langSw('small'),''],
+    ['Notifications','<div style="width:44px;height:24px;background:var(--or);border-radius:12px;cursor:pointer;position:relative;transition:all .2s" onclick="this.style.background=this.style.background===\'#ccc\'?\'var(--or)\':\'#ccc\'"><div style="position:absolute;top:2px;right:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:all .2s"></div></div>',''],
+    [t('logout'),'','<button class="btn btn-danger btn-sm btn-pill" onclick="doLogout()">'+t('logout')+'</button>'],
+  ].map(([label,mid,right])=>`<div style="padding:14px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:12px"><div class="s13 bold">${label}</div>${mid||''}${right||''}</div>`).join('')}
+</div>`;
+}
+
+/* ═══════════════════════════════════════════════
+   LANG SWITCHER COMPONENT
+═══════════════════════════════════════════════ */
+function langSw(size=''){
+  const sm = size==='small';
+  return `<div class="lang-sw" style="${sm?'transform:scale(.85);transform-origin:right':''}">
+    <button class="lbtn ${S.lang==='ka'?'on':''}" onclick="changeLang('ka')">ქა</button>
+    <button class="lbtn ${S.lang==='ru'?'on':''}" onclick="changeLang('ru')">РУ</button>
+    <button class="lbtn ${S.lang==='en'?'on':''}" onclick="changeLang('en')">EN</button>
+  </div>`;
+}
+function changeLang(l){ S.lang=l; document.documentElement.lang=l; render(); }
+
+/* ═══════════════════════════════════════════════
+   EVENTS & ACTIONS
+═══════════════════════════════════════════════ */
+let otpTimer = null;
+function bindEvents(){
+  // OTP input handling
+  if(S.authStep==='otp' && S.authPhone){
+    if(otpTimer) clearInterval(otpTimer);
+    let sec = 30;
+    otpTimer = setInterval(()=>{
+      sec--;
+      const el = document.getElementById('resendCount');
+      const btn = document.getElementById('resendBtn');
+      if(el) el.textContent = sec>0 ? `${t('resend_in')} ${sec}s` : '';
+      if(btn && sec<=0){ btn.disabled=false; clearInterval(otpTimer); }
+    },1000);
+  }
+}
+
+function doEmailAuth(){
+  const email = document.getElementById('a-email')?.value?.trim();
+  const pass = document.getElementById('a-pass')?.value;
+  const name = document.getElementById('a-name')?.value?.trim();
+  if(!email || !pass){ toast('Please fill all fields','red'); return; }
+  if(pass.length<6){ toast('Password must be 6+ characters','red'); return; }
+  if(S.authTab==='login'){
+    // simulate login
+    const stored = JSON.parse(localStorage.getItem('fm_users')||'[]');
+    const found = stored.find(u=>u.email===email) || {email,name:email.split('@')[0],role:'client',id:Date.now()};
+    saveUser(found); toast(t('auth_login')+' ✓','grn'); navigate('dash','home');
+  } else {
+    if(!name){ toast('Please enter your name','red'); return; }
+    S.pendingUser = {email,name,id:Date.now()};
+    S.authStep='role'; render();
+  }
+}
+
+function doGoogleAuth(){
+  // Simulate Google auth flow
+  const overlay = document.createElement('div');
+  overlay.className='modal-bg';
+  overlay.innerHTML=`<div class="modal" style="max-width:360px;text-align:center"><div class="modal-body" style="padding:2.5rem 2rem"><div style="margin-bottom:1.5rem">${googleSVG().replace('width="20" height="20"','width="48" height="48"')}</div><div class="s18 boldest mb8">Google Sign In</div><div class="s13 txt2 mb20">Connecting to Google...</div><div class="spinner" style="margin:0 auto"></div></div></div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>{
+    overlay.remove();
+    if(S.authTab==='login'){
+      saveUser({name:'Demo User',email:'demo@gmail.com',role:'client',id:Date.now(),provider:'google'});
+      toast('Signed in with Google ✓','grn'); navigate('dash','home');
+    } else {
+      S.pendingUser={name:'Demo User',email:'demo@gmail.com',id:Date.now(),provider:'google'};
+      S.authStep='role'; render();
+    }
+  },2000);
+}
+
+function sendOTP(){
+  const ph = document.getElementById('a-phone')?.value?.trim();
+  if(!ph||ph.length<9){ toast('Enter valid phone number','red'); return; }
+  S.authPhone=ph;
+  toast(t('otp_sent')+': '+ph,'');
+  render();
+}
+
+function otpInput(el,idx){
+  el.classList.add('filled');
+  if(el.value && idx<6){
+    const next = document.getElementById('otp'+(idx+1));
+    if(next) next.focus();
+  }
+  // auto-verify on last digit
+  if(idx===6 && el.value){ setTimeout(verifyOTP,300); }
+}
+function otpKey(e,idx){
+  if(e.key==='Backspace' && !e.target.value && idx>1){
+    const prev = document.getElementById('otp'+(idx-1));
+    if(prev){ prev.value=''; prev.classList.remove('filled'); prev.focus(); }
+  }
+}
+function verifyOTP(){
+  let code='';
+  for(let i=1;i<=6;i++){ code+=document.getElementById('otp'+i)?.value||''; }
+  if(code.length<6){ toast('Enter the 6-digit code','red'); return; }
+  // Accept any 6-digit code in demo
+  if(S.authTab==='login'){
+    saveUser({name:'Phone User',phone:S.authPhone,role:'client',id:Date.now(),provider:'phone'});
+    toast('Phone verified ✓','grn'); navigate('dash','home');
+  } else {
+    S.pendingUser={name:'Phone User',phone:S.authPhone,id:Date.now(),provider:'phone'};
+    S.authStep='role'; S.authPhone=''; render();
+  }
+}
+function resendOTP(){ toast(t('otp_sent')+': '+S.authPhone,''); }
+
+function renderRoleSelectOnce(){
+  S.authStep='role'; render();
+}
+function completeRegistration(){
+  const u = {...(S.pendingUser||{}),...{role:S.authRole,id:Date.now()}};
+  const users = JSON.parse(localStorage.getItem('fm_users')||'[]');
+  users.push(u);
+  localStorage.setItem('fm_users',JSON.stringify(users));
+  saveUser(u);
+  S.authStep='form'; S.pendingUser=null;
+  toast(t('auth_reg')+' ✓','grn');
+  navigate('dash','home');
+}
+
+function doLogout(){
+  clearUser();
+  S.clientOrders=demoOrders();
+  toast(t('logout'),'');
+  navigate('landing');
+}
+
+function acceptJob(id){
+  const j = S.jobs.find(x=>x.id===id);
+  if(j){
+    j.accepted=true;
+    S.masterJobs.unshift({id:'m'+Date.now(),title:j.title,svc:j.svc,status:'active',date:j.date,address:j.address,budget:j.budget,client:'Client',progress:0});
+    localStorage.setItem('fm_mjobs',JSON.stringify(S.masterJobs));
+    toast(t('accept')+': '+j.title,'grn');
+    render();
+  }
+}
+function declineJob(id){
+  const idx = S.jobs.findIndex(x=>x.id===id);
+  if(idx>=0){ S.jobs.splice(idx,1); toast(t('decline'),''); render(); }
+}
+
+function submitOrder(){
+  const title = document.getElementById('o-title')?.value?.trim();
+  const desc = document.getElementById('o-desc')?.value?.trim();
+  const addr = document.getElementById('o-addr')?.value?.trim();
+  const budget = document.getElementById('o-budget')?.value?.trim();
+  const date = document.getElementById('o-date')?.value?.trim()||'ASAP';
+  if(!title||!desc){ toast('Please fill Title and Description','red'); return; }
+  const svc = S.selectedChips[0]||'carpentry';
+  const newO = {id:'o'+Date.now(),title,svc,status:'pending',date,address:addr||'Tbilisi',budget:budget||'TBD',desc,masterName:null,masterRating:null};
+  S.clientOrders.unshift(newO);
+  saveOrders(S.clientOrders);
+  S.selectedChips=[];
+  toast(t('order_placed'),'grn');
+  navigate('dash','orders');
+}
+
+function toggleChip(svc,el){
+  if(S.selectedChips.includes(svc)){
+    S.selectedChips=S.selectedChips.filter(s=>s!==svc);
+    el.classList.remove('sel');
+  } else {
+    S.selectedChips=[svc]; // single select
+    document.querySelectorAll('#svcChips .chip').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');
+  }
+}
+
+function saveProfile(){
+  const name=document.getElementById('p-name')?.value;
+  const email=document.getElementById('p-email')?.value;
+  const phone=document.getElementById('p-phone')?.value;
+  const loc=document.getElementById('p-loc')?.value;
+  const bio=document.getElementById('p-bio')?.value;
+  S.user={...S.user,name,email,phone,location:loc,bio};
+  saveUser(S.user);
+  toast(t('save')+' ✓','grn');
+  render();
+}
+
+function filterOrders(status,btn){
+  document.querySelectorAll('.chips .chip').forEach(c=>c.classList.remove('sel'));
+  btn.classList.add('sel');
+  const container=document.getElementById('ordersContainer');
+  if(!container) return;
+  const filtered=status?S.clientOrders.filter(o=>o.status===status):S.clientOrders;
+  container.innerHTML=filtered.map(o=>renderOrderCard(o)).join('')||`<div class="card" style="text-align:center;padding:2rem;color:var(--txt2)">${t('no_orders')}</div>`;
+}
+
+function openMobDrawer(){
+  document.getElementById('dashSide')?.classList.add('open');
+  document.getElementById('mobDrawerBg')?.classList.add('open');
+}
+function closeMobDrawer(){
+  document.getElementById('dashSide')?.classList.remove('open');
+  document.getElementById('mobDrawerBg')?.classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  // Auto-detect language
+  S.lang = detectLang();
+  document.documentElement.lang = S.lang;
+
+  // If user is logged in, go to dashboard
+  if(S.user){
+    S.screen='dash'; S.subscreen='home';
+  }
+  render();
+});
+
+// Handle browser back
+window.addEventListener('popstate',()=>{
+  if(S.screen!=='landing') navigate('landing');
+});
+</script>
+</body>
+</html>
